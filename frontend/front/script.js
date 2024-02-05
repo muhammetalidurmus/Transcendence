@@ -27,7 +27,6 @@ function changePage(page) {
 
     // Sayfa değiştikçe URL hash'ini güncelle
     window.location.hash = page;
-    
 }
 
 function buildAnasayfaContent() {
