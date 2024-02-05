@@ -1,7 +1,13 @@
-// document.addEventListener('DOMContentLoaded', function () {
-//     // Başlangıçta anasayfa yüklenmesini istedim 
-//     changePage('anasayfa');
-// });
+document.addEventListener('DOMContentLoaded', function () {
+    // Sayfa yüklendiğinde hash'i kontrol et ve sayfayı değiştir
+    if (window.location.hash) {
+        const page = window.location.hash.substring(1);
+        changePage(page);
+    } else {
+        // Başlangıçta anasayfa yüklenmesini istedim 
+        changePage('anasayfa');
+    }
+});
 
 function changePage(page) {
     let content = '';
