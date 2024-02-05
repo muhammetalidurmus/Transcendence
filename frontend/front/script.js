@@ -37,15 +37,8 @@ function changePage(page) {
 
     // Sayfa değiştikçe URL hash'ini güncelle
     window.location.hash = page;
+    
 }
-
-// Sayfa yüklendiğinde hash'i kontrol et ve sayfayı değiştir
-window.addEventListener('DOMContentLoaded', function () {
-    if (window.location.hash) {
-        const page = window.location.hash.substring(1);
-        changePage(page);
-    }
-});
 
 // Geri ve İleri tuşlarına tepki verme
 window.addEventListener('hashchange', function () {

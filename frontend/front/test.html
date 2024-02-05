@@ -1,45 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Numbers</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login and Register</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
 <body>
-    <h1>Add Numbers</h1>
-    
-    <label for="num1">Number 1:</label>
-    <input type="text" id="num1" name="num1">
-    
-    <label for="num2">Number 2:</label>
-    <input type="text" id="num2" name="num2">
-    
-    <button onclick="addNumbers()">Add</button>
-    
-    <script>
-        function addNumbers() {
-            const num1 = parseInt(document.getElementById('num1').value);
-            const num2 = parseInt(document.getElementById('num2').value);
 
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://localhost:8000/api/add/', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
+  <div class="container">
+    <form id="loginForm">
+      <h2>Login</h2>
+      <label for="username">Username:</label>
+      <input type="text" id="username" required>
+      <label for="password">Password:</label>
+      <input type="password" id="password" required>
+      <button type="button" onclick="login()">Login</button>
+    </form>
 
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
-                        const data = JSON.parse(xhr.responseText);
-                        const result = data.result;
-                        alert(`Result: ${result}`);
-                    } else {
-                        alert('Error while processing the request.');
-                    }
-                }
-            };
+    <hr>
 
-            const requestBody = JSON.stringify({ num1, num2 });
-            xhr.send(requestBody);
-        }
-    </script>
+    <form id="registerForm">
+      <h2>Register</h2>
+      <label for="newUsername">New Username:</label>
+      <input type="text" id="newUsername" required>
+      <label for="newPassword">New Password:</label>
+      <input type="password" id="newPassword" required>
+      <button type="button" onclick="register()">Register</button>
+    </form>
+  </div>
+
+  <script>
+    function login() {
+      var username = document.getElementById("username").value;
+      var password = document.getElementById("password").value;
+      
+      // Burada giriş işlemleri gerçekleştirilebilir (örneğin: kullanıcı adı ve şifrenin kontrolü).
+      console.log("Login:", username, password);
+    }
+
+    function register() {
+      var newUsername = document.getElementById("newUsername").value;
+      var newPassword = document.getElementById("newPassword").value;
+      
+      // Burada kayıt işlemleri gerçekleştirilebilir (örneğin: yeni kullanıcı oluşturma).
+      console.log("Register:", newUsername, newPassword);
+    }
+  </script>
+
 </body>
 </html>
