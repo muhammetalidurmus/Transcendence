@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
         changePage(page);
     } else {
         // Başlangıçta anasayfa yüklenmesini istedim 
-        changePage('anasayfa');
+        changePage('login');
     }
 });
 
@@ -13,18 +13,22 @@ function changePage(page) {
     let content = '';
 
     switch (page) {
-        case 'anasayfa':
-            content = buildAnasayfaContent();
+        case 'login':
+            content = loginAdd();
             break;
         case 'chat':
-            content = '<h1>Chat</h1><p>Bu bir sohbet sayfasıdır.</p>';
+            content = headerAdd() + chatAdd();
             break;
         case 'oyun':
-            content = '<h1>Oyun</h1><p>Bu bir oyun sayfasıdır.</p>';
+            content = headerAdd() + oyunAdd();
             break;
         case 'profil':
-            content = '<h1>Profil</h1><p>Bu bir profil sayfasıdır.</p>';
+            content = headerAdd() + profilAdd();
             break;
+        case 'anasayfa':
+            content = headerAdd() + anasayfaAdd();
+            break;
+            
         default:
             content = '<h1>404 Not Found</h1><p>Sayfa bulunamadı.</p>';
     }
@@ -33,22 +37,6 @@ function changePage(page) {
 
     // Sayfa değiştikçe URL hash'ini güncelle
     window.location.hash = page;
-}
-
-function buildAnasayfaContent() {
-    return `
-        <h1>Anasayfa</h1>
-        <p>Hoş geldiniz!</p>
-        
-        <h1>Add Numbers</h1>
-        <label for="num1">Number 1:</label>
-        <input type="text" id="num1" name="num1">
-        
-        <label for="num2">Number 2:</label>
-        <input type="text" id="num2" name="num2">
-        
-        <button onclick="addNumbers()">Add</button>
-    `;
 }
 
 // Sayfa yüklendiğinde hash'i kontrol et ve sayfayı değiştir
