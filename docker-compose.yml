@@ -5,13 +5,13 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /root/ft_transcendence/backend/app
+      device: /root/ft_transcendence/Transcendence/backend/app
       o: bind
   frontend:
     driver: local
     driver_opts:
       type: none
-      device: /root/ft_transcendence/frontend/front
+      device: /root/ft_transcendence/Transcendence/frontend/front
       o: bind
 
 networks:

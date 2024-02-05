@@ -1,9 +1,10 @@
-// document.addEventListener('DOMContentLoaded', function () {
-//     // Başlangıçta anasayfa yüklenmesini istedim 
-//     changePage('anasayfa');
-// });
+document.addEventListener('DOMContentLoaded', function() {
+    // Başlangıçta anasayfa yüklenmesini istedim 
+    changePage('anasayfa');
+});
 
 function changePage(page) {
+    // Sadece örnek içerik, gerçek içeriği kendi projenize uygun şekilde oluşturun
     let content = '';
 
     switch (page) {
@@ -24,10 +25,6 @@ function changePage(page) {
     }
 
     document.getElementById('content').innerHTML = content;
-
-    // Sayfa değiştikçe URL hash'ini güncelle
-    window.location.hash = page;
-    
 }
 
 function buildAnasayfaContent() {
@@ -45,20 +42,4 @@ function buildAnasayfaContent() {
         <button onclick="addNumbers()">Add</button>
     `;
 }
-
-// Sayfa yüklendiğinde hash'i kontrol et ve sayfayı değiştir
-window.addEventListener('DOMContentLoaded', function () {
-    if (window.location.hash) {
-        const page = window.location.hash.substring(1);
-        changePage(page);
-    }
-});
-
-// Geri ve İleri tuşlarına tepki verme
-window.addEventListener('hashchange', function () {
-    if (window.location.hash) {
-        const page = window.location.hash.substring(1);
-        changePage(page);
-    }
-});
 

@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.shortcuts import render
 
 @csrf_exempt
 def add_numbers(request):
@@ -12,3 +13,6 @@ def add_numbers(request):
         return JsonResponse({'result': result})
     else:
         return JsonResponse({'error': 'Invalid request method'})
+
+def index(request):
+    return render(request,'index.html')
