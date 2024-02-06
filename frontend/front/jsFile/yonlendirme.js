@@ -28,7 +28,7 @@ function changePage(page) {
         case 'anasayfa':
             content = headerAdd() + anasayfaAdd();
             break;
-            
+             
         default:
             content = '<h1>404 Not Found</h1><p>Sayfa bulunamadı.</p>';
     }
