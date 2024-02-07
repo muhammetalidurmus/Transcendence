@@ -47,4 +47,25 @@ body {
     max-height: 60px;
    
 }
-    
+
+#pong {
+    border: 2px solid #FFF;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+}
+
+.start-button {
+    display: inline-block;
+    overflow: hidden;
+    background-color: transparent; /* şeffaf arka plan */
+    border: none; /* Kenar çerçevesini kaldırır */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+   
+}

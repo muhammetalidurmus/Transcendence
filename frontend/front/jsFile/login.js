@@ -20,6 +20,7 @@ function loginAdd() {
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
                 width: 300px;
                 text-align: center;
+                
             }
 
             form {
@@ -52,25 +53,26 @@ function loginAdd() {
                 background-color: #45a049;
             }
         </style>
-        <body>
         <div class="container">
         <form action="" method="get" id="girisyapForm">
-            <h2>Giriş Yap</h2>
+            <h2>GİRİŞ YAP</h2>
             <label for="username">Kullanıcı Adı</label>
             <input type="text" id="username" name="username" required>
             <label for="password">Şifre</label>
             <input type="password" id="password" name="password" required>
             <button type="submit">Giriş Yap</button>
         </form>
-
         <hr>
-
         <form action="" method="get" id="registerForm">
             <h2>KAYIT OL</h2>
-            <label for="newUsername">Yeni Kullanıcı Adı</label>
+            <label for="newUsername">Kullanıcı Adı</label>
             <input type="text" id="newUsername" name="newUsername" required>
-            <label for="newPassword">Yeni Şifre</label>
+            <label for="newPassword">Şifre</label>
             <input type="password" id="newPassword" name="newPassword" required>
+            <label for="email">E-posta Adresi</label>
+            <input type="email" id="email" name="email" required>
+            <label for="fullName">Ad Soyad</label>
+            <input type="text" id="fullName" name="fullName" required>
             <button type="submit">KAYIT OL</button>
         </form>
         </div>
