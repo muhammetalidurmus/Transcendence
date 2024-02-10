@@ -1,9 +1,18 @@
 document.addEventListener('DOMContentLoaded', function () {
+    if (window.location.search.includes('code=')) {
+        // Kodu burada işle, örneğin erişim belirteci al
+        // ...
+
+        // URL'den sorgu dizesini (query string) ve kodu kaldır
+        const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
+        window.history.replaceState(null, null, cleanUrl);
+    }
+
+    // Diğer yüklenme işlemleri
     if (window.location.hash) {
         const page = window.location.hash.substring(1);
         changePage(page);
     } else {
-        // Eğer sayfa yüklendiğinde hash yoksa, varsayılan olarak oyun sayfasına geçelim
         changePage('home');
     }
 });
