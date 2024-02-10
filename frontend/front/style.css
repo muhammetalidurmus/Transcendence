@@ -145,7 +145,8 @@ height: 100%;
 width: 100%; /* Dikeyde ortala */
 }
 
-#back-button-container {                                            /* GERİ BUTONU AYARLARI BACK */
+#back-button-container {
+                                              /* GERİ BUTONU AYARLARI BACK */
 position: fixed; /* Butonu sabit bir konumda tutar */
 top: 50%; /* Ekrannın dikey ortasına koyar */
 right: 50px; /* Sağ kenardan 10px içeride */
@@ -153,10 +154,12 @@ transform: translateY(-50%); /* Butonu tam dikey ortaya alır */
 z-index: 1000; /* Butonu en üstte tutar */
 }
 
-#back-button {                                                    /* GERİ BUTONU AYARLARI BACK */
+#back-button {    
+box-shadow: 0 0 40px rgb(204, 2, 2);                                                /* GERİ BUTONU AYARLARI BACK */
 padding: 10px 20px; /* Buton boyutu */
 font-weight: 900;
 font-size: 35px;
+font-style: italic;
 background-color: #302f2f; /* Buton arkaplan rengi */
 color: rgb(179, 24, 24); /* Buton yazı rengi */
 border: none; /* Kenarlık kaldırılır */
@@ -209,7 +212,7 @@ transform: rotate(30deg) translate(-50%); }
       height: 5px; }
   .hexagon-item:hover .hex-item div::before,
   .hexagon-item:hover .hex-item div::after {
-    background-color: #c21c1c; }
+    background-color: #f50202; }
 
 .hex-item {
 position: absolute;

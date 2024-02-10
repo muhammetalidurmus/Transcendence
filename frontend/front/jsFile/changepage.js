@@ -24,7 +24,7 @@ function changePage(page) {
         case 'pong-game':
             content = buttonstart();
             break;
-        case 'profil':
+        case 'profile':
             content = profilAdd();
             break;
         default:

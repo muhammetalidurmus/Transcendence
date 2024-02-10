@@ -11,7 +11,6 @@ function gameAdd() {
         <button id="back-button">Back</button>
         </div>
 
-        
     `;
 }
 
