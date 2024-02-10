@@ -1,10 +1,19 @@
 document.addEventListener('DOMContentLoaded', function () {
+    if (window.location.search.includes('code=')) {
+        // Kodu burada işle, örneğin erişim belirteci al
+        // ...
+
+        // URL'den sorgu dizesini (query string) ve kodu kaldır
+        const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
+        window.history.replaceState(null, null, cleanUrl);
+    }
+
+    // Diğer yüklenme işlemleri
     if (window.location.hash) {
         const page = window.location.hash.substring(1);
         changePage(page);
     } else {
-        // Eğer sayfa yüklendiğinde hash yoksa, varsayılan olarak oyun sayfasına geçelim
-        changePage('anasayfa');
+        changePage('home');
     }
 });
 
@@ -15,20 +24,17 @@ function changePage(page) {
         case 'login':
             content = loginAdd();
             break;
-        case 'chat':
-            content = headerAdd() + chatAdd();
+        case 'home':
+            content = homeAdd();
             break;
-        case 'oyun':
-            content = headerAdd() + gameAdd();
+        case 'game':
+            content = gameAdd();
             break;
-        case 'buttonstart':
-            content = headerAdd() + buttonstart();
+        case 'pong-game':
+            content = buttonstart();
             break;
-        case 'profil':
-            content = headerAdd() + profilAdd();
-            break;
-        case 'anasayfa':
-            content = headerAdd() + anasayfaAdd();
+        case 'profile':
+            content = profilAdd();
             break;
         default:
             content = '<h1>404 Not Found</h1><p>Sayfa bulunamadı.</p>';
@@ -38,7 +44,7 @@ function changePage(page) {
     window.location.hash = page;
 
     // Yalnızca oyun sayfasına geçildiğinde oyunu başlat
-    if (page === 'buttonstart') {
+    if (page === 'pong-game') {
         startgame();
     }
 }
