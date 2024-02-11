@@ -1,12 +1,9 @@
-function loginAdd() {
-    return `
-     <div class="profil-backgraund">
-     <div class="login">
-     <h2>GİRİŞ YAP</h2>
-     <button onclick="loginWithEcole42()">Ecole 42 ile Giriş Yap</button>
- </div>
+let isLoggedIn = false; // Kullanıcı girişi durumunu takip etmek için global değişken
 
-    `;
+function loginSuccess() {
+    isLoggedIn = true;
+    localStorage.setItem('isLoggedIn', 'true'); // Durumu localStorage'a kaydet
+    window.location.hash = 'home';
 }
 
 function loginWithEcole42() {
@@ -17,3 +14,26 @@ function loginWithEcole42() {
 
     window.location.href = authUrl;
 }
+
+// Giriş sayfası içeriğini oluşturan fonksiyon
+function loginAdd() {
+    return `
+        <div class="profil-backgraund">
+            <div class="login">
+                <h2>GİRİŞ YAP</h2>
+                <button onclick="loginWithEcole42()">Ecole 42 ile Giriş Yap</button>
+            </div>
+        </div>
+    `;
+}
+
+// URL'de bir kod varsa (OAuth işlemi sonrası), giriş başarılı olarak kabul et
+document.addEventListener('DOMContentLoaded', function () {
+    if (window.location.search.includes('code=')) {
+        const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
+        window.history.replaceState(null, null, cleanUrl);
+        loginSuccess(); 
+    }
+});
+
+
