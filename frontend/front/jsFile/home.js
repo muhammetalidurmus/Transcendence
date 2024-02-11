@@ -69,7 +69,7 @@ function homeAdd() {
                                         <div></div>
                                         <div></div>
                                     </div>
-                                    <a  class="hex-content"onclick="changePage('login')">
+                                    <a  class="hex-content"onclick="changePage('exit')">
                                         <span class="hex-content-inner">
                                             <span class="icon">
                                                 <i class="fa fa-bullseye"></i>
