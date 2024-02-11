@@ -2,8 +2,6 @@ let isLoggedIn = false; // Kullanıcı girişi durumunu takip etmek için global
 
 function loginSuccess() {
     isLoggedIn = true;
-    localStorage.setItem('isLoggedIn', 'true'); // Durumu localStorage'a kaydet
-    window.location.hash = 'home';
 }
 
 function loginWithEcole42() {
