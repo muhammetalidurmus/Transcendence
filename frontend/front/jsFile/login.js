@@ -1,9 +1,9 @@
 let isLoggedIn = false; // Kullanıcı girişi durumunu takip etmek için global değişken
 
 function loginSuccess() {
-    isLoggedIn = true;
-    localStorage.setItem('isLoggedIn', 'true'); // Durumu localStorage'a kaydet
-    window.location.hash = 'home';
+    isLoggedIn = true; // Kullanıcı giriş yaptı
+    localStorage.setItem('isLoggedIn', 'true'); // Oturum durumunu localStorage'a kaydet
+    window.location.hash = 'home'; // Kullanıcıyı anasayfaya yönlendir
 }
 
 function loginWithEcole42() {
@@ -32,8 +32,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (window.location.search.includes('code=')) {
         const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
         window.history.replaceState(null, null, cleanUrl);
-        loginSuccess(); 
+        loginSuccess();    
     }
 });
+
+
 
 
