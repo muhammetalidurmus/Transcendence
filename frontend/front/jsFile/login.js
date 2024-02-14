@@ -8,7 +8,7 @@ function loginSuccess() {
 
 function loginWithEcole42() {
     const client_id = 'u-s4t2ud-c61dbf9496f4cd97c24a0e1df99aa98bd56d9fa972d4ba6f7fce16704a824d0a'; // Ecole 42 uygulamanızın istemci kimliği
-    const redirect_uri = 'http://172.24.144.1:443'; // Ecole 42 tarafından yetkilendirme sonrası yönlendirileceğiniz URI
+    const redirect_uri = 'http://localhost:443'; // Ecole 42 tarafından yetkilendirme sonrası yönlendirileceğiniz URI
     const scopes = 'public'; // İzin istediğiniz kapsamlar
     const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=${client_id}&redirect_uri=${encodeURIComponent(redirect_uri)}&response_type=code&scope=${encodeURIComponent(scopes)}`;
 
@@ -28,13 +28,26 @@ function loginAdd() {
 }
 
 // URL'de bir kod varsa (OAuth işlemi sonrası), giriş başarılı olarak kabul et
-document.addEventListener('DOMContentLoaded', function () {
-    if (window.location.search.includes('code=')) {
-        const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
-        window.history.replaceState(null, null, cleanUrl);
-        loginSuccess();    
-    }
+document.addEventListener('DOMContentLoaded', function () 
+{
+
+        if (window.location.search.includes('code=')) 
+        {
+                // Yetkilendirme kodunu URL'den çıkar
+            const accessToken = new URLSearchParams(window.location.search).get('code');
+
+            // URL'den sorgu parametrelerini ve hash'i temizle
+            const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
+            window.history.replaceState(null, null, cleanUrl);
+
+            // `accessToken` değişkenini kullanarak sunucu tarafında erişim token'ı almak için bir istek yapın
+            console.log('accessToken', accessToken);
+            
+            loginSuccess();  
+        }
+        
 });
+
 
 
 
