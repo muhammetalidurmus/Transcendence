@@ -37,14 +37,8 @@ document.addEventListener('DOMContentLoaded', function ()
             const accessToken = new URLSearchParams(window.location.search).get('code');
             const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
             window.history.replaceState(null, null, cleanUrl);
-            // URL'den sorgu parametrelerini ve hash'i temizle
-          
-
+        
             // `accessToken` değişkenini kullanarak sunucu tarafında erişim token'ı almak için bir istek yapın
-            console.log('accessToken', accessToken);
-            
-
-
             token(accessToken);  
         }
         
@@ -60,10 +54,17 @@ function token(accessToken) { // accessToken parametresini kabul et
             if (xhr.status == 200) {
                 const data = JSON.parse(xhr.responseText);
                 console.log(data);
-                const result = data.result;
-                if (result) {
+                if (data) 
+                {
                     loginSuccess();
-                } else {
+                    localStorage.setItem('firstname', data.result.first_name);
+                    localStorage.setItem('lastname', data.result.last_name);
+                    localStorage.setItem('email', data.result.email);
+                    localStorage.setItem('username', data.result.login);
+                    localStorage.setItem('profileImage', data.result.image.link);
+
+                } 
+                else {
                     alert('Error while processing the request.');
                 }
 
