@@ -35,18 +35,49 @@ document.addEventListener('DOMContentLoaded', function ()
         {
                 // Yetkilendirme kodunu URL'den çıkar
             const accessToken = new URLSearchParams(window.location.search).get('code');
-
-            // URL'den sorgu parametrelerini ve hash'i temizle
             const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
             window.history.replaceState(null, null, cleanUrl);
-
+        
             // `accessToken` değişkenini kullanarak sunucu tarafında erişim token'ı almak için bir istek yapın
-            console.log('accessToken', accessToken);
-            
-            loginSuccess();  
+            token(accessToken);  
         }
         
 });
+
+function token(accessToken) { // accessToken parametresini kabul et
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://localhost:8000/api/add/', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                const data = JSON.parse(xhr.responseText);
+                console.log(data);
+                if (data) 
+                {
+                    loginSuccess();
+                    localStorage.setItem('firstname', data.result.first_name);
+                    localStorage.setItem('lastname', data.result.last_name);
+                    localStorage.setItem('email', data.result.email);
+                    localStorage.setItem('username', data.result.login);
+                    localStorage.setItem('profileImage', data.result.image.link);
+
+                } 
+                else {
+                    alert('Error while processing the request.');
+                }
+
+            } else {
+                alert('Error while processing the request.');
+            }
+        }
+    };
+
+    // accessToken'i doğru şekilde kullan
+    const requestBody = JSON.stringify({ code: accessToken });
+    xhr.send(requestBody);
+}
 
 
 

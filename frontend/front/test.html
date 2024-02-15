@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Numbers</title>
+</head>
+<body>
+    <h1>Add Numbers</h1>
+    
+    <label for="num1">Number 1:</label>
+    <input type="text" id="num1" name="num1">
+    
+    
+    <button onclick="addNumbers()">Add</button>
+    
+    <script>
+       function addNumbers() {
+    // Kullanıcıdan alınan değeri doğrudan kullan
+    
+    const num1 = document.getElementById('num1').value;
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://localhost:8000/api/add/', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                const data = JSON.parse(xhr.responseText);
+                const result = data.result;
+                alert(`Gelen: ${result}`);  // Sonucu kullanıcıya göster
+            } else {
+                alert('Error while processing the request.');
+            }
+        }
+    };
+
+    const requestBody = JSON.stringify({ num1 });
+    xhr.send(requestBody);
+}
+    </script>
+</body>
+</html>
