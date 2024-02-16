@@ -1,9 +1,11 @@
 function profilAdd() {
-    const lastname = localStorage.getItem('lastname') || 'Soyad';
-    const firsname = localStorage.getItem('firstname') || 'Adı';
-    const username = localStorage.getItem('username') || 'Kullanıcı Adı';
-    const email = localStorage.getItem('email') || 'E-Posta';
-    const profileImage = localStorage.getItem('profileImage') || '/img/default.png';
+    const lastname = localStorage.getItem('lastname');
+    const firsname = localStorage.getItem('firstname');
+    const username = localStorage.getItem('username');
+    const email = localStorage.getItem('email');
+    const profileImage = localStorage.getItem('profileImage');
+    const country = localStorage.getItem('country');
+    const city = localStorage.getItem('city');
 
     return `
     <title>Profil Sayfası</title>
@@ -12,9 +14,11 @@ function profilAdd() {
         <div class="container-profil">
             <img src="${profileImage}" alt="Profil Resmi" class="profile-img">
             <div class="profile-info">
-                <p><strong>Ad Soyad:</strong> <span>${firsname +' '+ lastname}</span></p>
-                <p><strong>Kullanıcı Adı:</strong> <span>${username}</span></p>
-                <p><strong>E-Posta:</strong> <span>${email}</span></p>
+            <p><strong>User Name :</strong> <span>${username}</span></p>
+                <p><strong>Name Surname :</strong> <span>${firsname +' '+ lastname}</span></p>
+                <p><strong>E-Mail :</strong> <span>${email}</span></p>
+                <br>
+                <p><strong>Country / City:</strong> <span>${country +' - '+ city}</span></p>
             </div>
         </div>
 

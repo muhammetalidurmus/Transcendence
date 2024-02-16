@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function ()
             const accessToken = new URLSearchParams(window.location.search).get('code');
             const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
             window.history.replaceState(null, null, cleanUrl);
+            loginSuccess();
         
             // `accessToken` değişkenini kullanarak sunucu tarafında erişim token'ı almak için bir istek yapın
             token(accessToken);  
@@ -53,7 +54,7 @@ function token(accessToken) { // accessToken parametresini kabul et
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
                 const data = JSON.parse(xhr.responseText);
-                console.log(data);
+                // console.log(data);
                 if (data) 
                 {
                     loginSuccess();
@@ -62,6 +63,8 @@ function token(accessToken) { // accessToken parametresini kabul et
                     localStorage.setItem('email', data.result.email);
                     localStorage.setItem('username', data.result.login);
                     localStorage.setItem('profileImage', data.result.image.link);
+                    localStorage.setItem('country', data.result.campus[0].country);
+                    localStorage.setItem('city', data.result.campus[0].city);
 
                 } 
                 else {

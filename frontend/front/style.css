@@ -1,25 +1,60 @@
-/* -------------------------GAME-------------------------*/
+/* -------------------------genel profil-------------------------*/
+.home-profile {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 30px;
+  z-index: 1000;
+  display: flex; /* Öğeleri yan yana hizala */
+  align-items: center; /* Dikey hizalamayı ayarla */
+}
 
-.camera-buttons 
-{
-    position: absolute;
-  top: 20px;
-    left: 20px;
+.home-profile-img {
+  width: 90px;
+  height: 90px;
+  border-top-left-radius: 25px; /* Sol üst köşeyi yuvarla */
+  border-bottom-left-radius: 25px; /* Sol alt köşeyi yuvarla */
+  border: 6px solid #c70505;
+  object-fit: cover;
+  margin-right: 10px; /* Kullanıcı adı ile arasına boşluk bırak */
+  box-shadow: 0 0 20px rgb(204, 2, 2); 
+}
+
+home-profile-text {
+  color: #ffffff;
+  font-size: 20px;
+  background-color: #c70505; /* Arka plan rengi */
+  padding: 5px 10px; /* İçerik ile arasında boşluk bırak */
+  border-top-left-radius: 30px; /* Sol üst köşeyi yuvarla */
+  border-bottom-left-radius: 30px; /* Sol alt köşeyi yuvarla */
+  box-shadow: 0 0 20px rgb(204, 2, 2); 
+}
+
+/* -------------------------GAME-------------------------*/
+.camera-buttons {
+  position: fixed;
+  top: 13%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
 }
 .camera-button {
     margin-right: 10px;
+    font-size: 20px;
     cursor: pointer;
     font-family: Arial, sans-serif;
-    color: #333;
-    background-color: #f0f0f0;
-    padding: 5px 10px;
-    border-radius: 5px;
+    color: #ffffff;
+    background-color: #5e0303;
+    padding: 5px 20px;
+    border-radius: 30px;
 }
 .scoreboard-container
 {
+    padding: 5px 10px;
+    font-size: 20px;
+    background-color: #5e0303;
     position: absolute;
-    top: 20px;
+    top: 2%;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -29,21 +64,20 @@
 {
     margin: 0 10px;
     font-family: Arial, sans-serif;
-    color: #333;
+    color: #ffffff;
 }
-.audio-button
-{
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    cursor: pointer;
-    font-family: Arial, sans-serif;
-    color: #333;
+.audio-button {
+  position: fixed; /* Sayfanın herhangi bir yerine sabitlemek için */
+  bottom: 20px; /* Sayfanın altından 20 piksel yukarıda */
+  right: 20px; /* Sağ tarafa 20 piksel içeride */
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  color: #ffffff;
 }
 
 
 
-/* -------------------------login start-------------------------*/
+/* -------------------------login-------------------------*/
 .login {
   background-color: rgba(255, 12, 12, 0.5 );
 
@@ -95,7 +129,7 @@ button:hover {
   background-color: #000000c9;
 }
 
-/* -------------------------login end-------------------------*/
+/* ------------------------- oyun -------------------------*/
 
 #pong {
     border: 2px solid #FFF;
@@ -116,6 +150,7 @@ button:hover {
   transform: translate(-50%, -50%);
   border-radius: 50%;
 }
+
 
 .profil-backgraund
 {
@@ -151,24 +186,23 @@ button:hover {
   border-radius: 50%;
   margin: 0 auto 20px;
   display: block;
-  border: 3px solid #90e606;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border: 3px solid #f6fa00;
   object-fit: cover;
 }
 .profile-info {
   text-align: center;
 }
 .profile-info p {
-  margin: 20px 0;
+  margin: 22px 0;
 
 }
 .profile-info p strong {
-  font-size: 20px;
+  font-size: 22px;
   font-weight:900;
   color: #020101;
 }
 .profile-info p span {
-  color: #cec3c3;
+  color: #ffffff;
   font-size: 20px;
   margin-left: 10px
   
