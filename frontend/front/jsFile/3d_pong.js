@@ -86,6 +86,32 @@ function create_scene() {
     camera.lookAt(0, 0, 0);
 }
 
+function changeCamera(key) {
+    if (key === "1") {
+        camera.position.set(0, 40, 25);
+        camera.lookAt(0, 0, 0);
+    } else if (key === "2") {
+        camera.position.set(0, 40, -25);
+        camera.lookAt(0, 0, 0);
+    } else if (key === "3") {
+        camera.position.set(-40, 20, 0);
+        camera.lookAt(0, 0, 0);
+    } else if (key === "4") {
+        camera.position.set(40, 20, 0);
+        camera.lookAt(0, 0, 0);
+    } else if (key === "5") {
+        camera.position.set(0, 40, 0);
+        camera.lookAt(0, 0, 0);
+    }
+}
+
+// Mause ile tanımladığınız butonlara tıklama olduğunda
+document.querySelectorAll('.camera-button').forEach(item => {
+    item.addEventListener('click', event => {
+        changeCamera(item.textContent);
+    });
+});
+
 function cam_pos(event) 
 {
     if (event.key == "1") // ana kamera

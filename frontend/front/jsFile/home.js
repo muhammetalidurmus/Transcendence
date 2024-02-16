@@ -1,6 +1,9 @@
 function homeAdd() {
+    const username = localStorage.getItem('username');
+    const profileImage = localStorage.getItem('profileImage');
     return `
             <title> ANASAYFA </title>
+            
             <div class="button-and-background");
             background-size: cover;">
                 <div class="background"></div>
@@ -86,5 +89,11 @@ function homeAdd() {
                 </div>
             </div>
         </div>
+
+        <div class="home-profile">
+                <home-profile-text>${username}</home-profile-text>
+                <img src="${profileImage}" alt="Profil Resmi" class="home-profile-img">
+        </div>
     `;
+    
 }

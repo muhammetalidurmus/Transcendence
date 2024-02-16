@@ -35,7 +35,6 @@ services:
       - backend:/app
     ports:
       - 8000:8000
-      - 5432:5432
     networks:
       - network
     restart: always
