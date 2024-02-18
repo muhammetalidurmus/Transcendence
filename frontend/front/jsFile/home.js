@@ -97,3 +97,25 @@ function homeAdd() {
     `;
     
 }
+
+
+function redirectAdd() {
+
+    return `
+
+    <title>Yönlendiriliyorsunuz...</title>
+ 
+        <div class="profil-backgraund">
+
+        <div class="baslik">Yönlendiriliyorsunuz...
+        <br>
+        <br>
+        Birazdan ana sayfaya yönlendirileceksiniz.
+        </div>
+        <div class="loader"></div>
+         
+        </div>
+            
+    `;
+
+}
