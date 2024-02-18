@@ -28,21 +28,11 @@ function loginAdd() {
                 <label for="password" class="auth-label">Şifre</label>
                 <input type="password" id="password" name="password" class="auth-input" required>
                 <button type="submit" class="auth-button">Giriş Yap</button>
+                <hr>
+                <button type="submit" class="register-button" onclick="changePage('register')">KAYIT OL</button>
             </form>
             <hr>
             <button onclick="loginWithEcole42()" class="ecole42-login-btn">Ecole 42 ile Giriş Yap</button>
-            <hr>
-            <form action="" method="get" id="auth-registerForm" class="auth-form">
-                <h2>KAYIT OL</h2>
-                <label for="newUsername" class="auth-label">Kullanıcı Adı</label>
-                <input type="text" id="newUsername" name="newUsername" class="auth-input" required>
-                <label for="newPassword" class="auth-label">Şifre</label>
-                <input type="password" id="newPassword" name="newPassword" class="auth-input" required>
-                <label for="email" class="auth-label">E-posta Adresi</label>
-                <input type="email" id="email" name="email" class="auth-input" required>
-                <label for="fullName" class="auth-label">Ad Soyad</label>
-                <input type="text" id="fullName" name="fullName" class="auth-input" required>
-                <button type="submit" class="auth-button">KAYIT OL</button>
             </form>
         </div>
 
@@ -77,7 +67,7 @@ function token(accessToken) { // accessToken parametresini kabul et
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
                 const data = JSON.parse(xhr.responseText);
-                // console.log(data);
+                 console.log(data);
                 if (data) 
                 {
                     localStorage.setItem('username', data.result.login);

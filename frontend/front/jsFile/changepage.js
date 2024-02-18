@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function changePage(page) {
     let content = '';
     
-    if (!isLoggedIn && page !== 'login') {
+    if (!isLoggedIn && page !== 'login' && page !== 'register') {
         // Kullanıcı giriş yapmamış ve login sayfasında değilse, login sayfasına yönlendir
         window.location.hash = 'login';
         // Fonksiyonun geri kalanını çalıştırmamak için return kullanın
@@ -42,6 +42,9 @@ function changePage(page) {
             break;
         case 'profile':
             content = profilAdd();
+            break;
+        case 'register':
+            content = registerAdd();
             break;
         case 'redirect':
             content =  redirectAdd();
