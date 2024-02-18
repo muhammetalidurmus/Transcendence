@@ -1,17 +1,17 @@
 /* ------------------------- LOGİN YÜKLENME EKRANI -------------------------*/
 .baslik {
   color: #fcfcfc;
-  font-size: 20px;
+  font-size: 30px;
   box-shadow: 0 0 10px rgb(255, 255, 255); 
   background-color: #c70505; /* Arka plan rengi */
-  padding: 5px 10px; /* İçerik ile arasında boşluk bırak */
+  padding: 10px 30px; /* İçerik ile arasında boşluk bırak */
 }
 .loader {
   border: 6px solid #f3f3f3; /* Light grey */
   border-top: 6px solid #ff0000; /* Blue */
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  width: 100px;
+  height: 100px;
   animation: spin 2s linear infinite;
   margin: 20px auto;
 }
@@ -99,44 +99,52 @@ home-profile-text {
 
 
 /* -------------------------login-------------------------*/
-.login {
-  background-color: rgba(255, 12, 12, 0.5 );
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  
+}
 
+.auth-label {
+  font-weight: bold;
+  color: #ffffff;
+  font-size: 15px;
+}
+
+.auth-input {
+  padding: 8px;
+  border: 1px solid #000000;
+  border-radius: 4px;
+}
+
+.auth-button {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.auth-button:hover {
+  background-color: #45a049;
+}
+
+.login {
+  color: #000000;
+  background-color: rgba(90, 89, 89, 10);
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgb(255, 255, 255);
-  width: 300px;
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgb(170, 6, 6);
+  width: 500px;
   text-align: center;
   
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  color: #e2e2e2;
-  
-}
-
-label {
-  font-weight: bold;
-  font-size: 20px;
-  font-weight:900;
-  color: #ebfc06;
-}
-
-input {
-  padding: 8px;
-  border: 1px solid #0514e0;
-  border-radius: 4px;
-  font-size: 20px;
-  font-weight:900;
-  color: #000000;
-  
-}
-
 button {
-  background-color: #e31e10;
+  background-color: #4caf50;
   color: #fff;
   padding: 10px;
   border: none;
@@ -147,7 +155,27 @@ button {
 }
 
 button:hover {
-  background-color: #000000c9;
+  background-color: #4caf50;
+}
+.ecole42-login-btn {
+  background-color: #003974; /* Ecole 42'nin renkleriyle uyumlu bir mavi */
+  color: #ffffff; /* Beyaz yazı rengi */
+  padding: 10px 15px; /* Daha fazla dolgu */
+  border-radius: 5px; /* Köşeleri yuvarlak */
+  border: none; /* Kenarlık kaldırıldı */
+  cursor: pointer; /* Fare imleci üzerine geldiğinde işaretçi */
+  font-weight: bold; /* Yazı tipi kalın */
+  font-size: 30px; /* Yazı tipi boyutu */
+  transition: background-color 0.3s ease; /* Arka plan rengi geçişi */
+}
+
+.ecole42-login-btn:hover {
+  background-color: #020302; /* Fare üzerine geldiğinde daha koyu bir mavi */
+}
+
+.login h2 {
+  color: #ffef14; /* Mavi renk */
+  font-size: 40px; /* Yazı boyutu */
 }
 
 /* ------------------------- oyun -------------------------*/

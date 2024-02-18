@@ -106,12 +106,9 @@ function redirectAdd() {
     <title>Yönlendiriliyorsunuz...</title>
  
         <div class="profil-backgraund">
-
-        <div class="baslik">Yönlendiriliyorsunuz...
-        <br>
-        <br>
-        Birazdan ana sayfaya yönlendirileceksiniz.
+        <div class="baslik">Yönlendiriliyorsunuz ...
         </div>
+        <br>
         <div class="loader"></div>
          
         </div>
