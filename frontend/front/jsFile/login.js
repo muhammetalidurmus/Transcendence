@@ -3,7 +3,7 @@ let isLoggedIn = false; // Kullanıcı girişi durumunu takip etmek için global
 function loginSuccess() {
     isLoggedIn = true; // Kullanıcı giriş yaptı
     localStorage.setItem('isLoggedIn', 'true'); // Oturum durumunu localStorage'a kaydet
-    window.location.hash = 'home'; // Kullanıcıyı anasayfaya yönlendir
+    changePage('redirect'); // Ana sayfaya yönlendir
 }
 
 function loginWithEcole42() {
@@ -37,10 +37,10 @@ document.addEventListener('DOMContentLoaded', function ()
             const accessToken = new URLSearchParams(window.location.search).get('code');
             const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
             window.history.replaceState(null, null, cleanUrl);
-            loginSuccess();
         
             // `accessToken` değişkenini kullanarak sunucu tarafında erişim token'ı almak için bir istek yapın
-            token(accessToken);  
+            loginSuccess();
+            token(accessToken);
         }
         
 });
@@ -57,12 +57,11 @@ function token(accessToken) { // accessToken parametresini kabul et
                 // console.log(data);
                 if (data) 
                 {
-                    loginSuccess();
+                    localStorage.setItem('username', data.result.login);
+                    localStorage.setItem('profileImage', data.result.image.link);
                     localStorage.setItem('firstname', data.result.first_name);
                     localStorage.setItem('lastname', data.result.last_name);
                     localStorage.setItem('email', data.result.email);
-                    localStorage.setItem('username', data.result.login);
-                    localStorage.setItem('profileImage', data.result.image.link);
                     localStorage.setItem('country', data.result.campus[0].country);
                     localStorage.setItem('city', data.result.campus[0].city);
 

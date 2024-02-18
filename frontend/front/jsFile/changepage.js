@@ -6,9 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (window.location.hash) {
         const page = window.location.hash.substring(1);
         changePage(page);
-    } else {
-        changePage(isLoggedIn ? 'home' : 'login'); // isLoggedIn true ise home, değilse login sayfasına yönlendir
-    }
+    } 
 });
 
 function changePage(page) {
@@ -43,6 +41,11 @@ function changePage(page) {
         case 'profile':
             content = profilAdd();
             break;
+        case 'redirect':
+            content =  redirectAdd();
+            setTimeout(() => window.location.hash = 'home', 2000);
+            break;
+
         default:
             content = '<h1>404 Not Found</h1><p>Sayfa bulunamadı.</p>';
     }
