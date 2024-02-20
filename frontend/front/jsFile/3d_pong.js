@@ -1,6 +1,7 @@
 let scene;
 let camera;
 let renderer;
+
 let l_player_p;
 let r_player_p;
 
@@ -8,9 +9,12 @@ let r_player_size;
 let r_player_material;
 let r_player;
 
+let player_speed_l = 0;
+let player_speed_r = 0;
+
 let leftPlayerScore = 0;
 let rightPlayerScore = 0;
-let animationFrameId;
+let animationFrameId = [];
 
 let ground;
 let groundGeometry;
@@ -21,9 +25,8 @@ let geometry;
 let material;
 let light;
 
-let ball_x = 0.25;
-let ball_z = 0.065;
-let random = random_count(1, 4);
+let ball_x = -0.25;
+let ball_z = -0.065;
 
 let listener;
 let audioLoader;
@@ -33,24 +36,45 @@ let isAudioOn = true;
 const audioButton = document.getElementById('audioButton');
 
 function game_start()
-{   
+{
+    
     create_scene();
     create_light();
     create_floor();
     l_player_p = create_player(-28.5);
     r_player_p = create_player(28.5);
     create_ball();
-    console.log("ball_x: " + ball_x + " ball_z: " + ball_z);
+    //console.log("ball_x: " + ball_x + " ball_z: " + ball_z);
 }
-
 function loop()
 {
-    document.addEventListener("keypress", player_move);
+    document.addEventListener("keypress", handle_keyDown_l);
+    document.addEventListener("keyup", handle_keyUp_l);
     document.addEventListener("keypress", cam_pos);
     move_ball();
     check_score();
+    animationFrameId.push(requestAnimationFrame(loop));
     renderer.render(scene, camera);
-    animationFrameId = requestAnimationFrame(loop);
+}
+
+function handle_keyDown_l(event)
+{
+    if(event.key == "w" && l_player_p.position.z >= -17)
+        player_speed_l = -0.2;
+    if(event.key == "s" && l_player_p.position.z <= 17)
+        player_speed_l = 0.2;
+    if(event.key == "o" && r_player_p.position.z >= -17)
+        player_speed_r = -0.2;
+    if(event.key == "l" && r_player_p.position.z <= 17)
+        player_speed_r = 0.2;
+}
+
+function handle_keyUp_l(event)
+{
+    if(event.key == "w" || event.key == "s")
+        player_speed_l = 0;
+    if(event.key == "o" || event.key == "l")
+        player_speed_r = 0;
 }
 
 // function create_scene()
@@ -211,7 +235,7 @@ function create_z_edge(x, y, z)
 
 function create_player(x)
 {
-    r_player_size = new THREE.BoxGeometry(0.5, 0.5, 4);
+    r_player_size = new THREE.BoxGeometry(0.5, 2, 4);
     r_player_material = new THREE.MeshStandardMaterial({color: 0xFFC300});
     r_player = new THREE.Mesh(r_player_size, r_player_material);
     scene.add(r_player);
@@ -219,28 +243,28 @@ function create_player(x)
     return r_player;
 }
 
-function player_move(event)
-{
-    if ((event.key == "w" || event.key == "a") && l_player_p.position.z >= -17)
-        l_player_p.position.z -= 1;
-    if ((event.key == "s" || event.key == "d") && l_player_p.position.z <= 17)
-        l_player_p.position.z += 1;
-    if (event.key == "o" && r_player_p.position.z >= -17)
-        r_player_p.position.z -= 1;
-    if (event.key == "l" && r_player_p.position.z <= 17)
-        r_player_p.position.z += 1;
-    console.log("-----------------------");
-    console.log("player " + (l_player_p.position.x) + " " + (l_player_p.position.y) + " "  + (l_player_p.position.z));
-    console.log("player " + (l_player_p.position.x) + " " + (l_player_p.position.y) + " "  + (l_player_p.position.z - 2));
-    console.log("player " + (l_player_p.position.x) + " " + (l_player_p.position.y) + " "  + (l_player_p.position.z + 2));
-    console.log("-----------------------");
-    console.log("-----------------------");
-    console.log("player " + (r_player_p.position.x) + " " + (r_player_p.position.y) + " "  + (r_player_p.position.z));
-    console.log("player " + (r_player_p.position.x) + " " + (r_player_p.position.y) + " "  + (r_player_p.position.z - 2));
-    console.log("player " + (r_player_p.position.x) + " " + (r_player_p.position.y) + " "  + (r_player_p.position.z + 2));
-    console.log(event.code);
-    console.log("-----------------------");
-}
+// function player_move(event)
+// {
+//     if ((event == "w" || event == "a") && l_player_p.position.z >= -17)
+//         l_player_p.position.z -= 1;
+//     if ((event == "s" || event == "d") && l_player_p.position.z <= 17)
+//         l_player_p.position.z += 1;
+//     if (event == "o" && r_player_p.position.z >= -17)
+//         r_player_p.position.z -= 1;
+//     if (event == "l" && r_player_p.position.z <= 17)
+//         r_player_p.position.z += 1;
+//     // console.log("-----------------------");
+//     // console.log("player " + (l_player_p.position.x) + " " + (l_player_p.position.y) + " "  + (l_player_p.position.z));
+//     // console.log("player " + (l_player_p.position.x) + " " + (l_player_p.position.y) + " "  + (l_player_p.position.z - 2));
+//     // console.log("player " + (l_player_p.position.x) + " " + (l_player_p.position.y) + " "  + (l_player_p.position.z + 2));
+//     // console.log("-----------------------");
+//     // console.log("-----------------------");
+//     // console.log("player " + (r_player_p.position.x) + " " + (r_player_p.position.y) + " "  + (r_player_p.position.z));
+//     // console.log("player " + (r_player_p.position.x) + " " + (r_player_p.position.y) + " "  + (r_player_p.position.z - 2));
+//     // console.log("player " + (r_player_p.position.x) + " " + (r_player_p.position.y) + " "  + (r_player_p.position.z + 2));
+//     // console.log(event.code);
+//     // console.log("-----------------------");
+// }
 
 function create_ball()
 {
@@ -253,10 +277,22 @@ function create_ball()
 }
 
 function move_ball() {
+
     // Topun koordinatlarını güncelle
     ball.position.x += ball_x;
     ball.position.z += ball_z;
 
+    l_player_p.position.z += player_speed_l;
+    r_player_p.position.z += player_speed_r;
+    
+    if(l_player_p.position.z <= -17)
+        l_player_p.position.z = -17;
+    if(l_player_p.position.z >= 17)
+        l_player_p.position.z = 17;
+    if(r_player_p.position.z <= -17)
+        r_player_p.position.z = -17;
+    if(r_player_p.position.z >= 17)
+        r_player_p.position.z = 17;
     const leftScoreElement = document.getElementById('leftPlayerScore');
     const rightScoreElement = document.getElementById('rightPlayerScore');
 
@@ -272,56 +308,66 @@ function move_ball() {
 
     // Skor kontrolü ve topun sıfırlanması
     if (ball.position.x + 0.5 >= 30) {
-        console.log('Sol Oyuncu Skoru: ', ++leftPlayerScore);
+        //console.log('Sol Oyuncu Skoru: ', ++leftPlayerScore);
         document.getElementById('leftPlayerScore').innerText = leftPlayerScore;
         reset_ball();
     } else if (ball.position.x - 0.5 <= -30) {
-        console.log('Sağ Oyuncu Skoru: ', ++rightPlayerScore);
+        //console.log('Sağ Oyuncu Skoru: ', ++rightPlayerScore);
         document.getElementById('rightPlayerScore').innerText = rightPlayerScore;
         reset_ball();
     }
     
-    if(((ball.position.x - 0.5) == (l_player_p.position.x)) && ((ball.position.z) >= ((l_player_p.position.z) - 2.25) && (ball.position.z) <= ((l_player_p.position.z) + 2.25)))
+    if (Math.abs(ball.position.x - l_player_p.position.x) <= 0.5 &&
+    ball.position.z >= l_player_p.position.z - 2 && 
+    ball.position.z <= l_player_p.position.z + 2)
     {
         ball_x = -ball_x;
         //sound.play();
     }
 
-    if(((ball.position.x + 0.5) == (r_player_p.position.x)) && ((ball.position.z) >= ((r_player_p.position.z) - 2.25) && (ball.position.z) <= ((r_player_p.position.z) + 2.25)))  
+    if (Math.abs(ball.position.x - r_player_p.position.x) <= 0.5 &&
+    ball.position.z >= r_player_p.position.z - 2 && 
+    ball.position.z <= r_player_p.position.z + 2)  
     {
         ball_x = -ball_x;
         //sound.play();
     }
-
 }
 
-function reset_ball()
-{
+// function reset_ball() {
+
+//     let mami = Math.random();
+//     // let ball_speed_x = Math.random();
+//     // let ball_speed_z = Math.random();
+//     // if(ball_speed_x < 0.25)
+//         let ball_speed_x = 0.25;
+    
+//     //if(ball_speed_z < 0.065)
+//         let ball_speed_z = 0.065;
+    
+//         ball.position.set(0, 0, 0); // Topu oyun alanının ortasına koyar
+//     // Topun x yönünde rastgele hızı, daha geniş bir aralıkta ve rastgele bir yön
+//     ball_x = ball_speed_x * (mami < 0.5 ? -1 : 1);
+//     // console.log(ball_x);
+//     // Topun z yönünde rastgele hızı, daha geniş bir aralıkta ve rastgele bir yön
+//     ball_z = ball_speed_z * (mami < 0.5 ? -1 : 1);
+//     // console.log(ball_z);
+// }
+
+function reset_ball() {
+    const moves = [
+        { x: -0.4, z: -0.2 },
+        { x: -0.3, z: -0.4 },
+        { x: -0.3, z: 0.3 },
+        { x: 0.3, z: 0.2 },
+        { x: 0.4, z: -0.2 },
+        { x: 0.2, z: -0.4 },
+    ];
+    const initialMove = moves[Math.floor(Math.random() * moves.length)];
+    ball_x = initialMove.x;
+    ball_z = initialMove.z;
+    console.log(ball_x, ball_z);
     ball.position.set(0, 0, 0);
-
-    let x = random_count(1, 4);
-      
-    if (x == 3)
-    {
-        ball_x *= 1
-    }
-    else if (x == 2)
-    {
-        ball_x *= -1
-    }
-    else if (x == 1)
-    {
-        ball_z *= 1
-    }
-    else if (x == 4)
-    {
-        ball_z *= -1
-    }
-}
-
-function random_count(min, max)
-{
-    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function check_score()
@@ -336,8 +382,12 @@ function check_score()
 }
 
 function stopGame() {
-    cancelAnimationFrame(animationFrameId);
-    resetGame();
+    console.log("durdu");
+    for (let index = 0; index < animationFrameId.length; index++) {
+        const element = animationFrameId[index];
+        cancelAnimationFrame(element);
+    }
+    // resetGame();
 }
 
 function resetGame() {
@@ -348,11 +398,9 @@ function resetGame() {
 }
 
 function resetBallAndPlayers() {
-    // Topun ve oyuncuların başlangıç pozisyonlarını ayarlayın.
-    ball.position.set(0, 0, 0); // Topu ortaya koy
-    l_player_p.position.set(-28.5, 0, 0); // Sol oyuncuyu başlangıç pozisyonuna getir
-    r_player_p.position.set(28.5, 0, 0); // Sağ oyuncuyu başlangıç pozisyonuna getir
-    // Diğer başlangıç ayarlarını da burada yapabilirsiniz.
+    ball.position.set(0, 0, 0);
+    l_player_p.position.set(-28.5, 0, 0);
+    r_player_p.position.set(28.5, 0, 0);
 }
 
 function make_sound()
@@ -367,7 +415,7 @@ function make_sound()
 });
     camera.add(listener);
 
-audioButton.addEventListener('click', function() {
+    audioButton.addEventListener('click', function() {
     if (isAudioOn) {
         isAudioOn = false;
         sound.setVolume(0);
