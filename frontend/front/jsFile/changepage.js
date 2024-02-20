@@ -14,7 +14,7 @@ function changePage(page) {
     let content = '';
     
     
-    console.log(animationFrameId.length);
+    //console.log(animationFrameId.length);
     if (animationFrameId.length > 0)
         stopGame();
     
