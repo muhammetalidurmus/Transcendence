@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function () {
     // localStorage'dan oturum durumunu kontrol et
     isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -14,6 +13,11 @@ document.addEventListener('DOMContentLoaded', function () {
 function changePage(page) {
     let content = '';
     
+    
+    console.log(animationFrameId.length);
+    if (animationFrameId.length > 0)
+        stopGame();
+    
     if (!isLoggedIn && page !== 'login' && page !== 'register') {
         // Kullanıcı giriş yapmamış ve login sayfasında değilse, login sayfasına yönlendir
         window.location.hash = 'login';
@@ -26,7 +30,8 @@ function changePage(page) {
         localStorage.setItem('isLoggedIn', 'false'); // Oturum durumunu localStorage'a kaydet
         page = 'login';
     }
-    
+
+
     switch (page) {
         case 'login':
             content = loginAdd();
@@ -47,7 +52,7 @@ function changePage(page) {
             content = registerAdd();
             break;
         case 'redirect':
-            content =  redirectAdd();
+            content = redirectAdd();
             setTimeout(() => window.location.hash = 'home', 2000);
             break;
 
