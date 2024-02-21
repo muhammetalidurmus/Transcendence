@@ -14,9 +14,12 @@ function changePage(page) {
     let content = '';
     
     
-    console.log(animationFrameId.length);
+    //console.log(animationFrameId.length);
     if (animationFrameId.length > 0)
+    {
         stopGame();
+        console.log("oyun durduruldu.");
+    }
     
     if (!isLoggedIn && page !== 'login' && page !== 'register') {
         // Kullanıcı giriş yapmamış ve login sayfasında değilse, login sayfasına yönlendir
@@ -67,6 +70,7 @@ function changePage(page) {
     if (page === 'pong-game') {
         game_start();
         loop();
+        make_sound();
     }
 }
 

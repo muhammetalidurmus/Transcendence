@@ -25,8 +25,8 @@ let geometry;
 let material;
 let light;
 
-let ball_x = -0.25;
-let ball_z = -0.065;
+let ball_x = 0.25;
+let ball_z = -0.25;
 
 let listener;
 let audioLoader;
@@ -106,7 +106,7 @@ function create_scene() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.getElementById('scene-container').appendChild(renderer.domElement);
     
-    camera.position.set(0, 40, 25);
+    camera.position.set(-40, 20, 0);
     camera.lookAt(0, 0, 0);
 }
 
@@ -308,11 +308,11 @@ function move_ball() {
 
     // Skor kontrolü ve topun sıfırlanması
     if (ball.position.x + 0.5 >= 30) {
-        //console.log('Sol Oyuncu Skoru: ', ++leftPlayerScore);
+        leftPlayerScore++;
         document.getElementById('leftPlayerScore').innerText = leftPlayerScore;
         reset_ball();
     } else if (ball.position.x - 0.5 <= -30) {
-        //console.log('Sağ Oyuncu Skoru: ', ++rightPlayerScore);
+        rightPlayerScore++;
         document.getElementById('rightPlayerScore').innerText = rightPlayerScore;
         reset_ball();
     }
@@ -321,52 +321,40 @@ function move_ball() {
     ball.position.z >= l_player_p.position.z - 2 && 
     ball.position.z <= l_player_p.position.z + 2)
     {
+        sound.play();
         ball_x = -ball_x;
-        //sound.play();
+
     }
 
     if (Math.abs(ball.position.x - r_player_p.position.x) <= 0.5 &&
     ball.position.z >= r_player_p.position.z - 2 && 
     ball.position.z <= r_player_p.position.z + 2)  
     {
-        ball_x = -ball_x;
-        //sound.play();
+
+        sound.play();
+        ball_x = -ball_x; 
     }
 }
 
-// function reset_ball() {
-
-//     let mami = Math.random();
-//     // let ball_speed_x = Math.random();
-//     // let ball_speed_z = Math.random();
-//     // if(ball_speed_x < 0.25)
-//         let ball_speed_x = 0.25;
-    
-//     //if(ball_speed_z < 0.065)
-//         let ball_speed_z = 0.065;
-    
-//         ball.position.set(0, 0, 0); // Topu oyun alanının ortasına koyar
-//     // Topun x yönünde rastgele hızı, daha geniş bir aralıkta ve rastgele bir yön
-//     ball_x = ball_speed_x * (mami < 0.5 ? -1 : 1);
-//     // console.log(ball_x);
-//     // Topun z yönünde rastgele hızı, daha geniş bir aralıkta ve rastgele bir yön
-//     ball_z = ball_speed_z * (mami < 0.5 ? -1 : 1);
-//     // console.log(ball_z);
-// }
-
 function reset_ball() {
-    const moves = [
-        { x: -0.4, z: -0.2 },
-        { x: -0.3, z: -0.4 },
-        { x: -0.3, z: 0.3 },
-        { x: 0.3, z: 0.2 },
-        { x: 0.4, z: -0.2 },
-        { x: 0.2, z: -0.4 },
-    ];
-    const initialMove = moves[Math.floor(Math.random() * moves.length)];
-    ball_x = initialMove.x;
-    ball_z = initialMove.z;
-    console.log(ball_x, ball_z);
+    const hiz_magnitude = 0.25; // Topun hızının büyüklüğünü belirler.
+
+    // Açıyı rastgele seçerken, belirli bir aralıkta (bu durumda -60° ile +60° arasında) bir değer üretir.
+    // Bu, topun farklı yönlerde ve açılarda hareket etmesini sağlar.
+    let angle = Math.random() * (5 * Math.PI / 7) - Math.PI / 3;
+
+    // Topun X eksenindeki yönünü rastgele seçer. Bu, topun saha içindeki hareket yönünü değiştirir,
+    // ve böylece her iki taraf için de adil bir oyun ortamı sunar.
+    if (Math.random() < 0.5) {
+        angle = Math.PI - angle; //%50 ihtimalle Açıyı ters çevirerek topun yönünü değiştirir.
+    }
+
+    // Rastgele seçilen açı ve belirlenen hız büyüklüğü kullanılarak, topun X ve Z eksenlerindeki hız bileşenlerini hesaplar.
+    // Bu, topun oyun alanında belirli bir yörüngede hareket etmesini sağlar.
+    ball_x = Math.cos(angle) * hiz_magnitude;
+    ball_z = Math.sin(angle) * hiz_magnitude;
+
+    // Topun pozisyonunu oyun alanının merkezine sıfırlar. Bu, puanlandırma sonrası veya oyunun yeniden başlatılması durumunda kullanılır.
     ball.position.set(0, 0, 0);
 }
 
@@ -382,19 +370,17 @@ function check_score()
 }
 
 function stopGame() {
-    console.log("durdu");
     for (let index = 0; index < animationFrameId.length; index++) {
         const element = animationFrameId[index];
         cancelAnimationFrame(element);
     }
-    // resetGame();
+    resetGame();
 }
 
 function resetGame() {
     leftPlayerScore = 0;
     rightPlayerScore = 0;
     resetBallAndPlayers(); 
-    loop();
 }
 
 function resetBallAndPlayers() {
@@ -403,28 +389,23 @@ function resetBallAndPlayers() {
     r_player_p.position.set(28.5, 0, 0);
 }
 
-function make_sound()
-{
+function make_sound() {
     listener = new THREE.AudioListener();
+    camera.add(listener); // Kameraya dinleyici ekleniyor.
+
+    sound = new THREE.Audio(listener); // Ses nesnesi oluşturuluyor.
+
     audioLoader = new THREE.AudioLoader();
-    sound;
+    audioLoader.load('/img/hit.mp3', function(buffer) { // Ses dosyası yolu doğrulanmalı.
+        sound.setBuffer(buffer);
+        sound.setVolume(0.5); // Ses seviyesi ayarlanıyor.
+        // İsteğe bağlı olarak burada sound.play() çağrılmayabilir.
+    });
 
-    audioLoader.load('hit.mp3', function(buffer){
-    sound = new THREE.Audio(listener);
-    sound.setBuffer(buffer);
-});
-    camera.add(listener);
-
+    // Ses açma/kapama butonu kontrolü
     audioButton.addEventListener('click', function() {
-    if (isAudioOn) {
-        isAudioOn = false;
-        sound.setVolume(0);
-        audioButton.innerText = 'Ses: Kapalı';
-        
-    } else {
-        isAudioOn = true;
-        sound.setVolume(1);
-        audioButton.innerText = 'Ses: Açık';
-    }
-});
+        isAudioOn = !isAudioOn; // Ses durumu değiştiriliyor.
+        sound.setVolume(isAudioOn ? 1 : 0);
+        audioButton.innerText = isAudioOn ? 'Ses: Açık' : 'Ses: Kapalı';
+    });
 }
