@@ -38,7 +38,7 @@ function getQueryParams(url) {
         });
     }
     const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
-window.history.replaceState(null, null, cleanUrl);
+    window.history.replaceState(null, null, cleanUrl);
     return queryParams;
 }
 
@@ -47,10 +47,6 @@ function isLoginPageOrRegisterPage() {
     const pageHash = window.location.hash;
     return pageHash === '#login' || pageHash === '#register';
 
-    if(pageHash === '#register')
-    {
-        
-    }
 }
 
 // Bu fonksiyonu sayfa yüklendiğinde veya bir sayfa değişikliği olduğunda çağırın

@@ -1,19 +1,5 @@
 version: '3'
 
-volumes:
-  backend:
-    driver: local
-    driver_opts:
-      type: none
-      device: ./backend/app
-      o: bind
-  frontend:
-    driver: local
-    driver_opts:
-      type: none
-      device: ./frontend/front
-      o: bind
-
 networks:
   network:
     driver: bridge
@@ -32,7 +18,7 @@ services:
     container_name: backend
     build: ./backend
     volumes:
-      - backend:/app
+      - ./backend/app:/app
     ports:
       - 8000:8000
     networks:
@@ -48,7 +34,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     volumes:
-      - frontend:/usr/src/app
+      - ./frontend/front:/usr/src/app
     ports:
      - 423:423
     restart: always
