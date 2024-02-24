@@ -3,6 +3,9 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.shortcuts import render
 import requests  # requests kütüphanesini içe aktarın
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
+from django.db.models import Q
 
 @csrf_exempt
 def get_access_token(request):
@@ -36,6 +39,7 @@ def get_access_token(request):
                 
                 if user_response.status_code == 200:
                     user_data = user_response.json()
+                    
                     return JsonResponse({'result': user_data})
                 else:
                     return JsonResponse({'error': 'Failed to fetch user data', 'status_code': user_response.status_code})
@@ -46,7 +50,28 @@ def get_access_token(request):
 
     else:
         return JsonResponse({'error': 'Invalid request method'})
-    
-    
+
+@csrf_exempt
+def register(request):
+    if request.method == 'POST':
+        try:
+            q = User.objects.filter(Q(email=data["email"]) | Q(username=data["username"]))
+            if q: return JsonResponse({"error": "zaten kayıtlı email veya username"}, status=3131)
+            data = json.loads(request.body)
+            user = User.objects.create(
+                username=data['username'],
+                first_name=data['first_name'],
+                last_name=data['last_name'],
+                email=data['email'],
+                password=make_password(data['password'])
+            )
+            print(user)
+            user.save()
+            return JsonResponse({"message": "Kullanıcı başarıyla oluşturuldu"}, status=201)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+    else:
+        return JsonResponse({"error": "Invalid request"}, status=400)
+
 def index(request):
     return render(request,'index.html')

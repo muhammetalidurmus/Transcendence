@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function ()
 
 function token(accessToken) { // accessToken parametresini kabul et
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:8000/api/add/', true);
+    xhr.open('POST', 'http://localhost:8000/api/add/');
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onreadystatechange = function () {
