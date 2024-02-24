@@ -18,7 +18,7 @@ function changePage(page) {
     if (animationFrameId.length > 0)
     {
         stopGame();
-        console.log("oyun durduruldu.");
+       // console.log("oyun durduruldu.");
     }
     
     if (!isLoggedIn && page !== 'login' && page !== 'register') {

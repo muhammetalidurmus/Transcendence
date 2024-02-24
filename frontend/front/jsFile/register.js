@@ -45,12 +45,8 @@ window.history.replaceState(null, null, cleanUrl);
 // URL'den sayfanın hash kısmını kontrol eden fonksiyon
 function isLoginPageOrRegisterPage() {
     const pageHash = window.location.hash;
-    return pageHash === '#login' || pageHash === '#register';
+    return pageHash === '#register';
 
-    if(pageHash === '#register')
-    {
-        
-    }
 }
 
 // Bu fonksiyonu sayfa yüklendiğinde veya bir sayfa değişikliği olduğunda çağırın
@@ -62,7 +58,6 @@ if (isLoginPageOrRegisterPage()) {
     const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
     window.history.replaceState(null, null, cleanUrl);
 
-    //console.log(formData); // Konsolda form verilerini göster
     signup(formData);
 }
 
@@ -74,17 +69,16 @@ function signup(data) {
     xhr.onload = function() {
         if (xhr.status === 201) {
             alert("Kayıt Başarılı : ");
-            changePage("login");
+            //changePage("login");
         }
-        if (xhr.status === 3131) {
-            alert("Kullanıcı adı veya eposta kullanılıyor : ");
-        }
+        // if (xhr.status === 2233) {
+        //     alert("Kullanıcı adı veya eposta kullanılıyor : ");
+        //}
          else {
             console.error('Hata:', xhr.responseText);
         }
     };
 
-    console.log(data["username"]);
     let da = {
         username: data["username"],
         first_name: data["first_name"],
@@ -92,8 +86,6 @@ function signup(data) {
         email: data["email"],
         password: data["password1"]
     };
-    console.log(da);
     xhr.send(JSON.stringify(da));
-    console.log(da);
 }
 
