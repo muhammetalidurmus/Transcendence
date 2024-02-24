@@ -5,14 +5,16 @@ function registerAdd() {
             
                 <form action="" method="get" id="auth-registerForm" class="auth-form">
                     <h2>KAYIT OL</h2>
-                    <label for="newUsername" class="auth-label">Kullanıcı Adı</label>
-                    <input type="text" id="newUsername" name="newUsername" class="auth-input" required>
-                    <label for="newPassword" class="auth-label">Şifre</label>
-                    <input type="password" id="newPassword" name="newPassword" class="auth-input" required>
+                    <label for="username" class="auth-label">Kullanıcı Adı</label>
+                    <input type="text" id="username" name="username" class="auth-input" required>
+                    <label for="id_password1" class="auth-label">Şifre</label>
+                    <input type="password" id="id_password1" name="password1" class="auth-input" required>
                     <label for="email" class="auth-label">E-posta Adresi</label>
                     <input type="email" id="email" name="email" class="auth-input" required>
-                    <label for="fullName" class="auth-label">Ad Soyad</label>
-                    <input type="text" id="fullName" name="fullName" class="auth-input" required>
+                    <label for="first_name" class="auth-label">Ad</label>
+                    <input type="text" id="first_name" name="first_name" class="auth-input" required>
+                    <label for="last_name" class="auth-label">Soyad</label>
+                    <input type="text" id="last_name" name="last_name" class="auth-input" required>
                     <button type="submit" class="auth-button">KAYIT OL</button>
                 </form>
          </div>
@@ -44,6 +46,11 @@ window.history.replaceState(null, null, cleanUrl);
 function isLoginPageOrRegisterPage() {
     const pageHash = window.location.hash;
     return pageHash === '#login' || pageHash === '#register';
+
+    if(pageHash === '#register')
+    {
+        
+    }
 }
 
 // Bu fonksiyonu sayfa yüklendiğinde veya bir sayfa değişikliği olduğunda çağırın
@@ -55,5 +62,38 @@ if (isLoginPageOrRegisterPage()) {
     const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
     window.history.replaceState(null, null, cleanUrl);
 
-    console.log(formData); // Konsolda form verilerini göster
+    //console.log(formData); // Konsolda form verilerini göster
+    signup(formData);
 }
+
+function signup(data) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://localhost:8000/api/register/', true);
+    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+
+    xhr.onload = function() {
+        if (xhr.status === 201) {
+            alert("Kayıt Başarılı : ");
+            changePage("login");
+        }
+        if (xhr.status === 3131) {
+            alert("Kullanıcı adı veya eposta kullanılıyor : ");
+        }
+         else {
+            console.error('Hata:', xhr.responseText);
+        }
+    };
+
+    console.log(data["username"]);
+    let da = {
+        username: data["username"],
+        first_name: data["first_name"],
+        last_name: data["last_name"],
+        email: data["email"],
+        password: data["password1"]
+    };
+    console.log(da);
+    xhr.send(JSON.stringify(da));
+    console.log(da);
+}
+

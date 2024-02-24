@@ -39,6 +39,9 @@ services:
       - network
     restart: always
 
+    depends_on:
+      - postgres
+
   frontend:
     container_name: frontend
     build:
@@ -49,5 +52,18 @@ services:
     ports:
      - 423:423
     restart: always
+    networks:
+      - network
+
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: mdurmus
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mdurmus
+    ports:
+      - 5432:5432
     networks:
       - network

@@ -33,7 +33,6 @@ let audioLoader;
 let sound;
 
 let isAudioOn = true;
-const audioButton = document.getElementById('audioButton');
 
 function game_start()
 {
@@ -46,6 +45,7 @@ function game_start()
     create_ball();
     //console.log("ball_x: " + ball_x + " ball_z: " + ball_z);
 }
+
 function loop()
 {
     document.addEventListener("keypress", handle_keyDown_l);
@@ -77,29 +77,12 @@ function handle_keyUp_l(event)
         player_speed_r = 0;
 }
 
-// function create_scene()
-// {
-//     scene = new THREE.Scene();
-//     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-//     scene.background = new THREE.Color(0xffbae9);
-    
-//     renderer = new THREE.WebGLRenderer();
-//     renderer.shadowMap.enabled = true;
-//     renderer.setSize(window.innerWidth, window.innerHeight);
-//     document.getElementById('scene-container').appendChild(renderer.domElement);
-    
-//     camera.position.set(0, 14, 20);
-//     camera.lookAt(0, 0, 0);
-// }
-
-function create_scene() {
+function create_scene()
+{
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     
     var loader = new THREE.TextureLoader();
-    // loader.load('/img/background.jpg', function(texture) {
-    //     scene.background = texture;
-    // });
     
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.shadowMap.enabled = true;
@@ -110,7 +93,8 @@ function create_scene() {
     camera.lookAt(0, 0, 0);
 }
 
-function changeCamera(key) {
+function changeCamera(key) 
+{
     if (key === "1") {
         camera.position.set(0, 40, 25);
         camera.lookAt(0, 0, 0);
@@ -129,7 +113,6 @@ function changeCamera(key) {
     }
 }
 
-// Mause ile tanımladığınız butonlara tıklama olduğunda
 document.querySelectorAll('.camera-button').forEach(item => {
     item.addEventListener('click', event => {
         changeCamera(item.textContent);
@@ -243,29 +226,6 @@ function create_player(x)
     return r_player;
 }
 
-// function player_move(event)
-// {
-//     if ((event == "w" || event == "a") && l_player_p.position.z >= -17)
-//         l_player_p.position.z -= 1;
-//     if ((event == "s" || event == "d") && l_player_p.position.z <= 17)
-//         l_player_p.position.z += 1;
-//     if (event == "o" && r_player_p.position.z >= -17)
-//         r_player_p.position.z -= 1;
-//     if (event == "l" && r_player_p.position.z <= 17)
-//         r_player_p.position.z += 1;
-//     // console.log("-----------------------");
-//     // console.log("player " + (l_player_p.position.x) + " " + (l_player_p.position.y) + " "  + (l_player_p.position.z));
-//     // console.log("player " + (l_player_p.position.x) + " " + (l_player_p.position.y) + " "  + (l_player_p.position.z - 2));
-//     // console.log("player " + (l_player_p.position.x) + " " + (l_player_p.position.y) + " "  + (l_player_p.position.z + 2));
-//     // console.log("-----------------------");
-//     // console.log("-----------------------");
-//     // console.log("player " + (r_player_p.position.x) + " " + (r_player_p.position.y) + " "  + (r_player_p.position.z));
-//     // console.log("player " + (r_player_p.position.x) + " " + (r_player_p.position.y) + " "  + (r_player_p.position.z - 2));
-//     // console.log("player " + (r_player_p.position.x) + " " + (r_player_p.position.y) + " "  + (r_player_p.position.z + 2));
-//     // console.log(event.code);
-//     // console.log("-----------------------");
-// }
-
 function create_ball()
 {
     geometry = new THREE.SphereGeometry(0.5, 32,32);
@@ -276,9 +236,9 @@ function create_ball()
     scene.add(ball);
 }
 
-function move_ball() {
+function move_ball()
+{
 
-    // Topun koordinatlarını güncelle
     ball.position.x += ball_x;
     ball.position.z += ball_z;
 
@@ -318,8 +278,8 @@ function move_ball() {
     }
     
     if (Math.abs(ball.position.x - l_player_p.position.x) <= 0.5 &&
-    ball.position.z >= l_player_p.position.z - 2 && 
-    ball.position.z <= l_player_p.position.z + 2)
+    ball.position.z >= l_player_p.position.z - 2.25 && 
+    ball.position.z <= l_player_p.position.z + 2.25)
     {
         sound.play();
         ball_x = -ball_x;
@@ -327,8 +287,8 @@ function move_ball() {
     }
 
     if (Math.abs(ball.position.x - r_player_p.position.x) <= 0.5 &&
-    ball.position.z >= r_player_p.position.z - 2 && 
-    ball.position.z <= r_player_p.position.z + 2)  
+    ball.position.z >= r_player_p.position.z - 2.25 && 
+    ball.position.z <= r_player_p.position.z + 2.25)  
     {
 
         sound.play();
@@ -336,7 +296,8 @@ function move_ball() {
     }
 }
 
-function reset_ball() {
+function reset_ball()
+{
     const hiz_magnitude = 0.25; // Topun hızının büyüklüğünü belirler.
 
     // Açıyı rastgele seçerken, belirli bir aralıkta (bu durumda -60° ile +60° arasında) bir değer üretir.
@@ -369,7 +330,8 @@ function check_score()
     }
 }
 
-function stopGame() {
+function stopGame()
+{
     for (let index = 0; index < animationFrameId.length; index++) {
         const element = animationFrameId[index];
         cancelAnimationFrame(element);
@@ -377,35 +339,48 @@ function stopGame() {
     resetGame();
 }
 
-function resetGame() {
+function resetGame()
+{
     leftPlayerScore = 0;
     rightPlayerScore = 0;
     resetBallAndPlayers(); 
 }
 
-function resetBallAndPlayers() {
+function resetBallAndPlayers()
+{
     ball.position.set(0, 0, 0);
     l_player_p.position.set(-28.5, 0, 0);
     r_player_p.position.set(28.5, 0, 0);
 }
 
-function make_sound() {
+function make_sound()
+{
     listener = new THREE.AudioListener();
-    camera.add(listener); // Kameraya dinleyici ekleniyor.
-
-    sound = new THREE.Audio(listener); // Ses nesnesi oluşturuluyor.
+    camera.add(listener)
+    sound = new THREE.Audio(listener);
 
     audioLoader = new THREE.AudioLoader();
-    audioLoader.load('/img/hit.mp3', function(buffer) { // Ses dosyası yolu doğrulanmalı.
-        sound.setBuffer(buffer);
-        sound.setVolume(0.5); // Ses seviyesi ayarlanıyor.
-        // İsteğe bağlı olarak burada sound.play() çağrılmayabilir.
+    audioLoader.load('/img/hit.mp3', function(buffer) {
+    sound.setBuffer(buffer);
+    sound.setVolume(0.5); 
     });
-
-    // Ses açma/kapama butonu kontrolü
-    audioButton.addEventListener('click', function() {
-        isAudioOn = !isAudioOn; // Ses durumu değiştiriliyor.
-        sound.setVolume(isAudioOn ? 1 : 0);
-        audioButton.innerText = isAudioOn ? 'Ses: Açık' : 'Ses: Kapalı';
+    
+    document.getElementById('audioButton').addEventListener('click', function()
+    {
+        var icon = this.querySelector('i');
+        if (icon.classList.contains('fa-volume-off') && (isAudioOn))
+        {
+            icon.classList.remove('fa-volume-off');
+            icon.classList.add('fa-volume-xmark');
+            isAudioOn = false;
+            sound.setVolume(0);
+        }
+        else
+        {
+            icon.classList.remove('fa-volume-xmark');
+            icon.classList.add('fa-volume-off');
+            sound.setVolume(1);
+            isAudioOn = true;
+        }
     });
 }

@@ -35,7 +35,7 @@ function buttonstart() {
       <div class="camera-button" onclick="changeCamera('5')">5</div>
     </div>
 
-    <div class="audio-button" id="audioButton">Ses: Açık</div>
+    <div class="audio-button" id="audioButton"><i class="fa-solid fa-volume-off fa-2xl" style="color: #c70505;"></i></div>
     <div class="scoreboard-container">
         <div class="score">
           Sol Oyuncu: <span id="leftPlayerScore">0</span>
@@ -52,7 +52,7 @@ function buttonstart() {
         <div class="home-profile">
                 <home-profile-text>${username}</home-profile-text>
                 <img src="${profileImage}" alt="Profil Resmi" class="home-profile-img">
-        </div>   
+        </div>
 
     `;
    
