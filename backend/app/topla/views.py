@@ -55,8 +55,8 @@ def get_access_token(request):
 def register(request):
     if request.method == 'POST':
         try:
-            q = User.objects.filter(Q(email=data["email"]) | Q(username=data["username"]))
-            if q: return JsonResponse({"error": "zaten kayıtlı email veya username"}, status=3131)
+            # q = User.objects.filter(Q(email=data["email"]) | Q(username=data["username"]))
+            # if q: return JsonResponse({"error": "zaten kayıtlı email veya username"}, status=2233)
             data = json.loads(request.body)
             user = User.objects.create(
                 username=data['username'],
