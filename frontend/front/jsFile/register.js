@@ -71,9 +71,9 @@ function signup(data) {
             alert("Kayıt Başarılı : ");
             //changePage("login");
         }
-        // if (xhr.status === 2233) {
-        //     alert("Kullanıcı adı veya eposta kullanılıyor : ");
-        //}
+        if (xhr.status === 400) {
+            alert("Kullanıcı adı veya eposta kullanılıyor : ");
+        }
          else {
             console.error('Hata:', xhr.responseText);
         }
