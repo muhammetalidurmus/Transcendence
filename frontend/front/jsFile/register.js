@@ -69,10 +69,11 @@ function signup(data) {
     xhr.onload = function() {
         if (xhr.status === 201) {
             alert("Kayıt Başarılı : ");
-            //changePage("login");
+            changePage("login");
         }
         if (xhr.status === 400) {
             alert("Kullanıcı adı veya eposta kullanılıyor : ");
+            changePage("register");
         }
          else {
             console.error('Hata:', xhr.responseText);

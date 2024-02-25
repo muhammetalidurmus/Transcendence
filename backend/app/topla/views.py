@@ -5,7 +5,7 @@ from django.shortcuts import render
 import requests  # requests kütüphanesini içe aktarın
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
-from django.db.models import Q
+from django.contrib.auth import authenticate, login
 
 @csrf_exempt
 def get_access_token(request):
@@ -51,6 +51,7 @@ def get_access_token(request):
     else:
         return JsonResponse({'error': 'Invalid request method'})
 
+
 @csrf_exempt
 def register(request):
     if request.method == 'POST':
@@ -75,6 +76,25 @@ def register(request):
             return JsonResponse({"message": "Kullanıcı başarıyla oluşturuldu"}, status=201)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
+    else:
+        return JsonResponse({"error": "Invalid request"}, status=400)
+    
+
+@csrf_exempt
+def loginup(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        username = data.get('username')
+        password = data.get('password')  # Frontend'den gelen password1 alanını kullan
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            # Kullanıcı başarıyla doğrulandı
+            return JsonResponse({"message": "Kullanıcı doğrulandı"}, status=201)
+        else:
+            # Doğrulama başarısız oldu
+            return JsonResponse({"error": "Kullanıcı adı veya şifre hatalı"}, status=400)
     else:
         return JsonResponse({"error": "Invalid request"}, status=400)
 

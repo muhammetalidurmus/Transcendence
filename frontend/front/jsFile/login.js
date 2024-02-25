@@ -8,8 +8,8 @@ function loginAdd() {
                 <h2>GİRİŞ YAP</h2>
                 <label for="username" class="auth-label">Kullanıcı Adı</label>
                 <input type="text" id="username" name="username" class="auth-input" required>
-                <label for="password" class="auth-label">Şifre</label>
-                <input type="password" id="password" name="password" class="auth-input" required>
+                <label for="id_password1" class="auth-label">Şifre</label>
+                <input type="password" id="id_password1" name="password1" class="auth-input" required>
                 <button type="submit" class="auth-button">Giriş Yap</button>
                 <hr>
                 <button type="submit" class="register-button" onclick="changePage('register')">KAYIT OL</button>
@@ -94,7 +94,69 @@ function token(accessToken) { // accessToken parametresini kabul et
     xhr.send(requestBody);
 }
 
+function getQueryParams(url) {
+    let queryParams = {};
+    // URL'den sorgu dizgisini ayrıştırma
+    let queryString = url.split('?')[1];
+    if (queryString) {
+        queryString = queryString.split('#')[0]; // Fragment identifier'ı kaldır
+        let params = queryString.split('&');
+        params.forEach(param => {
+            let [key, value] = param.split('=');
+            queryParams[decodeURIComponent(key)] = decodeURIComponent(value.replace(/\+/g, ' '));
+        });
+    }
+    const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
+window.history.replaceState(null, null, cleanUrl);
+    return queryParams;
+}
 
+// URL'den sayfanın hash kısmını kontrol eden fonksiyon
+function isLoginPage() {
+    const pageHash = window.location.hash;
+    return pageHash === '#login';
 
+}
 
+// Bu fonksiyonu sayfa yüklendiğinde veya bir sayfa değişikliği olduğunda çağırın
+if (isLoginPage()) {
+    let currentUrl = window.location.href; // Geçerli URL'yi al
+    let formData = getQueryParams(currentUrl);
 
+    // URL'deki sorgu parametrelerini temizle
+    const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
+    window.history.replaceState(null, null, cleanUrl);
+
+    if(formData && formData.hasOwnProperty('username') && formData.hasOwnProperty('password1'))
+    {
+        loginup(formData);
+    }
+
+}
+
+function loginup(data) {
+    var xhr = new XMLHttpRequest();
+    console.log(data);
+    xhr.open('POST', 'http://localhost:8000/api/loginup/', true);
+    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+
+    xhr.onload = function() {
+        if (xhr.status === 201) {
+            alert("Kullanıcı doğrulandı");
+            loginSuccess();
+        }
+        if (xhr.status === 400) {
+            console.log(xhr.response);
+            alert("Kullanıcı adı yada şifre hatalı");
+        }
+         else {
+            console.error('Hata:', xhr.responseText);
+        }
+    };
+
+    let da = {
+        username: data["username"],
+        password: data["password1"]
+    };
+    xhr.send(JSON.stringify(da));
+}
