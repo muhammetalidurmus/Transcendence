@@ -143,13 +143,19 @@ function loginup(data) {
     xhr.onload = function() {
         if (xhr.status === 201) {
             alert("Kullanıcı doğrulandı");
+            // Yanıttan elde edilen veriyi ayrıştır
+            var response = JSON.parse(xhr.responseText);
+            // Kullanıcı verilerini localStorage'a ayrı ayrı kaydet
+            localStorage.setItem('username', response.user.username);
+            localStorage.setItem('firstname', response.user.first_name);
+            localStorage.setItem('lastname', response.user.last_name);
+            localStorage.setItem('email', response.user.email);
+
             loginSuccess();
-        }
-        if (xhr.status === 400) {
+        } else if (xhr.status === 400) {
             console.log(xhr.response);
-            alert("Kullanıcı adı yada şifre hatalı");
-        }
-         else {
+            alert("Kullanıcı adı ya da şifre hatalı");
+        } else {
             console.error('Hata:', xhr.responseText);
         }
     };

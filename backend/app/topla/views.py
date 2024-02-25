@@ -85,15 +85,29 @@ def loginup(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         username = data.get('username')
-        password = data.get('password')  # Frontend'den gelen password1 alanını kullan
+        password = data.get('password')  # Frontend'den alınan password alanı
 
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            # Kullanıcı başarıyla doğrulandı
-            return JsonResponse({"message": "Kullanıcı doğrulandı"}, status=201)
+            
+            # Kullanıcının şifresi hariç tüm verilerini al
+            user_data = {
+                "id": user.id,
+                "username": user.username,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "email": user.email,
+                # Diğer alanlarınız varsa buraya ekleyebilirsiniz.
+                # "alan_adi": user.alan_adi,
+            }
+            
+            return JsonResponse({
+                "message": "Kullanıcı doğrulandı",
+                "user": user_data
+            }, status=201)
+        
         else:
-            # Doğrulama başarısız oldu
             return JsonResponse({"error": "Kullanıcı adı veya şifre hatalı"}, status=400)
     else:
         return JsonResponse({"error": "Invalid request"}, status=400)
