@@ -75,8 +75,8 @@ function token(accessToken) { // accessToken parametresini kabul et
                     localStorage.setItem('firstname', data.result.first_name);
                     localStorage.setItem('lastname', data.result.last_name);
                     localStorage.setItem('email', data.result.email);
-                    localStorage.setItem('country', data.result.campus[0].country);
-                    localStorage.setItem('city', data.result.campus[0].city);
+                    // localStorage.setItem('country', data.result.campus[0].country);
+                    // localStorage.setItem('city', data.result.campus[0].city);
 
                 } 
                 else {
@@ -150,12 +150,23 @@ function loginup(data) {
             localStorage.setItem('firstname', response.user.first_name);
             localStorage.setItem('lastname', response.user.last_name);
             localStorage.setItem('email', response.user.email);
+            localStorage.setItem('country', response.user.country);
+            localStorage.setItem('city', response.user.city);
 
             loginSuccess();
-        } else if (xhr.status === 400) {
+        } 
+        else if (xhr.status === 400) {
             console.log(xhr.response);
             alert("Kullanıcı adı ya da şifre hatalı");
-        } else {
+        }
+
+        if (xhr.status === 404) {
+            alert("Kullanıcı bulunamadı");
+            changePage("login");
+        } 
+
+        else 
+        {
             console.error('Hata:', xhr.responseText);
         }
     };
