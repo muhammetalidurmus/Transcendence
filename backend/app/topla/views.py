@@ -3,9 +3,10 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.shortcuts import render
 import requests  # requests kütüphanesini içe aktarın
-from django.contrib.auth.models import User
+from .models import ecole
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth import authenticate, login
+from django.contrib.auth.hashers import check_password 
+
 
 @csrf_exempt
 def get_access_token(request):
@@ -57,24 +58,27 @@ def register(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
+            print(data)
 
-             # Kullanıcı adı veya e-posta adresi zaten var mı diye kontrol et
-            if User.objects.filter(username=data['username']).exists():
+            # Kullanıcı adı veya e-posta adresi zaten var mı diye kontrol et
+            if ecole.objects.filter(username=data['username']).exists():
                 return JsonResponse({"error": "Bu kullanıcı adı zaten alınmış."}, status=400)
-            if User.objects.filter(email=data['email']).exists():
+            if ecole.objects.filter(email=data['email']).exists():
                 return JsonResponse({"error": "Bu e-posta adresiyle bir hesap zaten var."}, status=400)
             
-            user = User.objects.create(
+            ecole.objects.create(
                 username=data['username'],
                 first_name=data['first_name'],
                 last_name=data['last_name'],
                 email=data['email'],
+                country=data['country'],
+                city=data['city'],
                 password=make_password(data['password'])
             )
-            print(user)
-            user.save()
+            
             return JsonResponse({"message": "Kullanıcı başarıyla oluşturuldu"}, status=201)
         except Exception as e:
+            print(e)  # Hatanın ne olduğunu konsolda görmek için
             return JsonResponse({"error": str(e)}, status=400)
     else:
         return JsonResponse({"error": "Invalid request"}, status=400)
@@ -87,28 +91,28 @@ def loginup(request):
         username = data.get('username')
         password = data.get('password')  # Frontend'den alınan password alanı
 
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            login(request, user)
-            
-            # Kullanıcının şifresi hariç tüm verilerini al
-            user_data = {
-                "id": user.id,
-                "username": user.username,
-                "first_name": user.first_name,
-                "last_name": user.last_name,
-                "email": user.email,
-                # Diğer alanlarınız varsa buraya ekleyebilirsiniz.
-                # "alan_adi": user.alan_adi,
-            }
-            
-            return JsonResponse({
-                "message": "Kullanıcı doğrulandı",
-                "user": user_data
-            }, status=201)
-        
-        else:
-            return JsonResponse({"error": "Kullanıcı adı veya şifre hatalı"}, status=400)
+        try:
+            user = ecole.objects.get(username=username)
+            if check_password(password, user.password):
+                # Kullanıcının şifresi hariç tüm verilerini al
+                user_data = {
+                    "id": user.id,
+                    "username": user.username,
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                    "email": user.email,
+                    "country": user.country,
+                    "city": user.city
+                }
+                
+                return JsonResponse({
+                    "message": "Kullanıcı doğrulandı",
+                    "user": user_data
+                }, status=201)
+            else:
+                return JsonResponse({"error": "Kullanıcı adı veya şifre hatalı"}, status=400)
+        except ecole.DoesNotExist:
+            return JsonResponse({"error": "Kullanıcı bulunamadı"}, status=404)
     else:
         return JsonResponse({"error": "Invalid request"}, status=400)
 

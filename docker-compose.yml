@@ -30,15 +30,16 @@ services:
 
   backend:
     container_name: backend
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     volumes:
-      - backend:/app
+      - ./backend/app:/app
     ports:
-      - 8000:8000
+      - "8000:8000"
     networks:
       - network
     restart: always
-    
     depends_on:
       - postgres
 

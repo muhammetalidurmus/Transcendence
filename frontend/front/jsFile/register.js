@@ -15,6 +15,11 @@ function registerAdd() {
                     <input type="text" id="first_name" name="first_name" class="auth-input" required>
                     <label for="last_name" class="auth-label">Soyad</label>
                     <input type="text" id="last_name" name="last_name" class="auth-input" required>
+                    <label for="country_" class="auth-label">Ülke</label>
+                    <input type="country_" id="country_" name="country_" class="auth-input" required>
+                    <label for="city_" class="auth-label">Şehir</label>
+                    <input type="city_" id="city_" name="city_" class="auth-input" required>
+
                     <button type="submit" class="auth-button">KAYIT OL</button>
                 </form>
          </div>
@@ -58,7 +63,10 @@ if (isLoginPageOrRegisterPage()) {
     const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
     window.history.replaceState(null, null, cleanUrl);
 
-    signup(formData);
+    if(formData && formData.hasOwnProperty('username') && formData.hasOwnProperty('password1'))
+    {
+        signup(formData);
+    }
 }
 
 function signup(data) {
@@ -75,7 +83,7 @@ function signup(data) {
             alert("Kullanıcı adı veya eposta kullanılıyor : ");
             changePage("register");
         }
-         else {
+        else {
             console.error('Hata:', xhr.responseText);
         }
     };
@@ -85,8 +93,11 @@ function signup(data) {
         first_name: data["first_name"],
         last_name: data["last_name"],
         email: data["email"],
-        password: data["password1"]
+        password: data["password1"],
+        country: data["country_"],
+        city: data["city_"]
     };
+    console.log(da);
     xhr.send(JSON.stringify(da));
 }
 
