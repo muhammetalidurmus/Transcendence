@@ -25,6 +25,7 @@ let geometry;
 let material;
 let light;
 
+
 let ball_x = Math.cos(1.1052744050774266) * 0.25;
 let ball_z = Math.sin(1.1052744050774266) * 0.25;
 

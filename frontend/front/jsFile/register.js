@@ -84,9 +84,6 @@ function signup(data) {
             failregister();
             changePage('register');
         }
-        else {
-            console.error('Hata:', xhr.responseText);
-        }
     };
 
     let da = {

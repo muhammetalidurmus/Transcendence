@@ -5,7 +5,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (window.location.hash) {
         const page = window.location.hash.substring(1);
         changePage(page);
-    } else {
+    } 
+    else 
+    {
         changePage(isLoggedIn ? 'home' : 'login'); // isLoggedIn true ise home, değilse login sayfasına yönlendir
     }
 });
@@ -14,13 +16,11 @@ function changePage(page) {
     let content = '';
     
     
-    //console.log(animationFrameId.length);
     if (animationFrameId.length > 0)
     {
         stopGame();
-       // console.log("oyun durduruldu.");
     }
-    
+
     if (!isLoggedIn && page !== 'login' && page !== 'register') {
         // Kullanıcı giriş yapmamış ve login sayfasında değilse, login sayfasına yönlendir
         window.location.hash = 'login';
