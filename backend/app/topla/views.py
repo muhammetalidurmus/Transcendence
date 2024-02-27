@@ -40,17 +40,15 @@ def get_access_token(request):
                 
                 if user_response.status_code == 200:
                     user_data = user_response.json()
-
-                # Kullanıcı adıyla veritabanını kontrol et eğer bu kullanıcı yoksa veritabanına kaydet.
-                user_exists = ecole.objects.filter(username=user_data['login']).exists()      
-                if not user_exists:
-                    ecole.objects.create(
-                    username=user_data['login'],
-                    first_name=user_data['first_name'],
-                    last_name=user_data['last_name'],
-                    email=user_data['email'],
-                    country=user_data['campus'][0]['country'],
-                    city=user_data['campus'][0]['city'],
+                    user_exists = ecole.objects.filter(username=user_data['login']).exists()# Kullanıcı adıyla veritabanını kontrol et eğer bu kullanıcı yoksa veritabanına kaydet.
+                    if not user_exists:
+                        ecole.objects.create(
+                        username=user_data['login'],
+                        first_name=user_data['first_name'],
+                        last_name=user_data['last_name'],
+                        email=user_data['email'],
+                        country=user_data['campus'][0]['country'],
+                        city=user_data['campus'][0]['city'],
                     )
                     return JsonResponse({'result': user_data})
                 else:
@@ -69,15 +67,22 @@ def register(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
+            username = data['username']
 
+            # 42 API'sini kullanarak kullanıcı adının var olup olmadığını kontrol et
+            user_exists_in_42 = check_user_in_42_api(username)
+            if user_exists_in_42:
+                return JsonResponse({"error": "Bu kullanıcı adı 42 sisteminde zaten var."}, status=400)
+            
             # Kullanıcı adı veya e-posta adresi zaten var mı diye kontrol et
-            if ecole.objects.filter(username=data['username']).exists():
+            if ecole.objects.filter(username=username).exists():
                 return JsonResponse({"error": "Bu kullanıcı adı zaten alınmış."}, status=400)
             if ecole.objects.filter(email=data['email']).exists():
                 return JsonResponse({"error": "Bu e-posta adresiyle bir hesap zaten var."}, status=400)
-            
+
+            # Kullanıcıyı kaydet
             ecole.objects.create(
-                username=data['username'],
+                username=username,
                 first_name=data['first_name'],
                 last_name=data['last_name'],
                 email=data['email'],
@@ -124,3 +129,37 @@ def loginup(request):
 
 def index(request):
     return render(request,'index.html')
+
+
+
+def gettoken():
+    token_url = 'https://api.intra.42.fr/oauth/token'
+    client_id = 'u-s4t2ud-c61dbf9496f4cd97c24a0e1df99aa98bd56d9fa972d4ba6f7fce16704a824d0a'
+    client_secret = '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'
+    data = {
+        'grant_type': 'client_credentials',
+        'client_id': client_id,
+        'client_secret': client_secret,
+    }
+    response = requests.post(token_url, data=data)
+    if response.status_code == 200:
+        return response.json().get('access_token')
+    else:
+        raise Exception("Access token could not be retrieved")
+
+def check_user_in_42_api(username):
+    access_token = gettoken()
+    if access_token:
+        user_info_url = f'https://api.intra.42.fr/v2/users/{username}'
+        headers = {'Authorization': f'Bearer {access_token}'}
+        response = requests.get(user_info_url, headers=headers)
+        if response.status_code == 200:
+            # Kullanıcı bulundu
+            return True
+        elif response.status_code == 404:
+            # Kullanıcı bulunamadı
+            return False
+        else:
+            raise Exception("API request failed with status code: {}".format(response.status_code))
+    else:
+        raise Exception("Failed to get access token")

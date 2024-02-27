@@ -68,7 +68,7 @@ function token(accessToken) { // accessToken parametresini kabul et
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
                 const data = JSON.parse(xhr.responseText);
-                 //console.log(data);
+                 console.log(data);
                 if (data) 
                 {
                     localStorage.setItem('username', data.result.login);
@@ -137,7 +137,6 @@ if (isLoginPage()) {
 
 function loginup(data) {
     var xhr = new XMLHttpRequest();
-    console.log(data);
     xhr.open('POST', 'http://localhost:8000/api/loginup/', true);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
