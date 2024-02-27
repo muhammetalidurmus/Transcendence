@@ -2,7 +2,7 @@ function homeAdd() {
     const username = localStorage.getItem('username');
     const profileImage = localStorage.getItem('profileImage');
     return `
-            <title> ANASAYFA </title>
+            <title> Home </title>
             
             <div class="button-and-background");
             background-size: cover;">
@@ -106,7 +106,9 @@ function redirectAdd() {
     <title>Yönlendiriliyorsunuz...</title>
  
         <div class="profil-backgraund">
-        <div class="baslik">Yönlendiriliyorsunuz ...
+        <div class="baslik">GİRİŞ BAŞARILI
+        <br>
+        Yönlendiriliyorsunuz ...
         </div>
         <br>
         <div class="loader"></div>

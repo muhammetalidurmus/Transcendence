@@ -2,4 +2,4 @@ Django==4.2.3
 django-cors-headers
 requests
 psycopg2-binary==2.9.3
-
+Pillow

@@ -1,3 +1,10 @@
+.popupclass {
+  width: 600px; /* Genişlik */
+  height: 700px; /* Yükseklik */
+  background-color: rgba(5, 5, 5, 1); /* Yarı saydam beyaz arka plan */
+  color: #ffffff;
+  box-shadow: 0 0 20px rgb(204, 2, 2); 
+}
 /* ------------------------- LOGİN YÜKLENME EKRANI -------------------------*/
 .baslik {
   color: #fcfcfc;

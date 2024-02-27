@@ -1,5 +1,6 @@
 function registerAdd() {
     return `
+    <title> Register </title>
     <div class="profil-backgraund">
         <div class="login">
             
@@ -76,12 +77,12 @@ function signup(data) {
 
     xhr.onload = function() {
         if (xhr.status === 201) {
-            alert("Kayıt Başarılı : ");
-            changePage("login");
+            successregister();
+            changePage('login');
         }
         if (xhr.status === 400) {
-            alert("Kullanıcı adı veya eposta kullanılıyor : ");
-            changePage("register");
+            failregister();
+            changePage('register');
         }
         else {
             console.error('Hata:', xhr.responseText);
@@ -95,9 +96,33 @@ function signup(data) {
         email: data["email"],
         password: data["password1"],
         country: data["country_"],
-        city: data["city_"]
+        city: data["city_"],
+        profileImage: data["img/icon.png"]
     };
     console.log(da);
     xhr.send(JSON.stringify(da));
 }
 
+function successregister() {
+    Swal.fire({
+        title: 'Kayıt Başarılı Giriş Yapabilirsiniz',
+        icon: 'success',
+        confirmButtonText: 'Tamam',
+        confirmButtonColor: '#d33',
+        customClass: {
+            popup: 'popupclass'
+        }
+    });
+}
+
+function failregister() {
+    Swal.fire({
+        title: 'Kullanıcı Adı Yada Email Kullanılıyor',
+        icon: 'error',
+        confirmButtonText: 'Tamam',
+        confirmButtonColor: '#d33',
+        customClass: {
+            popup: 'popupclass'
+        }
+    });
+}

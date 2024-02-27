@@ -8,7 +8,7 @@ function profilAdd() {
     const city = localStorage.getItem('city');
 
     return `
-    <title>Profil Sayfası</title>
+    <title> Profile </title>
 
     <div class="profil-backgraund">
         <div class="container-profil">
