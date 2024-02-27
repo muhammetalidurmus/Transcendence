@@ -8,7 +8,7 @@ POSTGRES_IMAGE=postgres
 all:
 	@docker-compose -f docker-compose.yml up --build
 
-re: clean all
+re: clean all 
 
 down:
 	@docker-compose -f docker-compose.yml down

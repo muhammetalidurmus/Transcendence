@@ -40,7 +40,18 @@ def get_access_token(request):
                 
                 if user_response.status_code == 200:
                     user_data = user_response.json()
-                    
+
+                # Kullanıcı adıyla veritabanını kontrol et eğer bu kullanıcı yoksa veritabanına kaydet.
+                user_exists = ecole.objects.filter(username=user_data['login']).exists()      
+                if not user_exists:
+                    ecole.objects.create(
+                    username=user_data['login'],
+                    first_name=user_data['first_name'],
+                    last_name=user_data['last_name'],
+                    email=user_data['email'],
+                    country=user_data['campus'][0]['country'],
+                    city=user_data['campus'][0]['city'],
+                    )
                     return JsonResponse({'result': user_data})
                 else:
                     return JsonResponse({'error': 'Failed to fetch user data', 'status_code': user_response.status_code})
@@ -58,7 +69,6 @@ def register(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            print(data)
 
             # Kullanıcı adı veya e-posta adresi zaten var mı diye kontrol et
             if ecole.objects.filter(username=data['username']).exists():
@@ -78,7 +88,6 @@ def register(request):
             
             return JsonResponse({"message": "Kullanıcı başarıyla oluşturuldu"}, status=201)
         except Exception as e:
-            print(e)  # Hatanın ne olduğunu konsolda görmek için
             return JsonResponse({"error": str(e)}, status=400)
     else:
         return JsonResponse({"error": "Invalid request"}, status=400)
@@ -95,7 +104,7 @@ def loginup(request):
             user = ecole.objects.get(username=username)
             if check_password(password, user.password):
                 # Kullanıcının şifresi hariç tüm verilerini al
-                user_data = {
+                user_datas = {
                     "id": user.id,
                     "username": user.username,
                     "first_name": user.first_name,
@@ -105,10 +114,7 @@ def loginup(request):
                     "city": user.city
                 }
                 
-                return JsonResponse({
-                    "message": "Kullanıcı doğrulandı",
-                    "user": user_data
-                }, status=201)
+                return JsonResponse({"message": "Kullanıcı doğrulandı","user": user_datas}, status=201)
             else:
                 return JsonResponse({"error": "Kullanıcı adı veya şifre hatalı"}, status=400)
         except ecole.DoesNotExist:

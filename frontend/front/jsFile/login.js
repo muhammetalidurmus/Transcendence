@@ -1,6 +1,7 @@
 // Giriş sayfası içeriğini oluşturan fonksiyon
 function loginAdd() {
     return `
+    <title> Login </title>
         <div class="profil-backgraund">
             <div class="login">
            
@@ -75,8 +76,8 @@ function token(accessToken) { // accessToken parametresini kabul et
                     localStorage.setItem('firstname', data.result.first_name);
                     localStorage.setItem('lastname', data.result.last_name);
                     localStorage.setItem('email', data.result.email);
-                    // localStorage.setItem('country', data.result.campus[0].country);
-                    // localStorage.setItem('city', data.result.campus[0].city);
+                    localStorage.setItem('country', data.result.campus[0].country);
+                    localStorage.setItem('city', data.result.campus[0].city);
 
                 } 
                 else {
@@ -142,7 +143,6 @@ function loginup(data) {
 
     xhr.onload = function() {
         if (xhr.status === 201) {
-            alert("Kullanıcı doğrulandı");
             // Yanıttan elde edilen veriyi ayrıştır
             var response = JSON.parse(xhr.responseText);
             // Kullanıcı verilerini localStorage'a ayrı ayrı kaydet
@@ -152,23 +152,17 @@ function loginup(data) {
             localStorage.setItem('email', response.user.email);
             localStorage.setItem('country', response.user.country);
             localStorage.setItem('city', response.user.city);
-
             loginSuccess();
         } 
         else if (xhr.status === 400) {
-            console.log(xhr.response);
-            alert("Kullanıcı adı ya da şifre hatalı");
+            notpassword();
+            changePage('login');
         }
 
         if (xhr.status === 404) {
-            alert("Kullanıcı bulunamadı");
-            changePage("login");
+            notuser();
+            changePage('login');
         } 
-
-        else 
-        {
-            console.error('Hata:', xhr.responseText);
-        }
     };
 
     let da = {
@@ -177,3 +171,27 @@ function loginup(data) {
     };
     xhr.send(JSON.stringify(da));
 }
+
+function notuser() {
+    Swal.fire({
+        title: 'Böyle Bir Kullanıcı Yok!',
+        icon: 'error',
+        confirmButtonText: 'Tamam',
+        customClass: {
+            popup: 'popupclass'
+        }
+    });
+}
+
+function notpassword() {
+    Swal.fire({
+        title: 'Şifreniz Yanlış!',
+        icon: 'error',
+        confirmButtonText: 'Tamam',
+        confirmButtonColor: '#d33',
+        customClass: {
+            popup: 'popupclass'
+        }
+    });
+}
+

@@ -25,8 +25,8 @@ let geometry;
 let material;
 let light;
 
-let ball_x = 0.25;
-let ball_z = -0.25;
+let ball_x = Math.cos(1.1052744050774266) * 0.25;
+let ball_z = Math.sin(1.1052744050774266) * 0.25;
 
 let listener;
 let audioLoader;
@@ -312,6 +312,7 @@ function reset_ball()
 
     // Rastgele seçilen açı ve belirlenen hız büyüklüğü kullanılarak, topun X ve Z eksenlerindeki hız bileşenlerini hesaplar.
     // Bu, topun oyun alanında belirli bir yörüngede hareket etmesini sağlar.
+    console.log(angle,'deneme');
     ball_x = Math.cos(angle) * hiz_magnitude;
     ball_z = Math.sin(angle) * hiz_magnitude;
 
