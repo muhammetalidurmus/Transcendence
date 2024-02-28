@@ -76,14 +76,24 @@ function signup(data) {
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
     xhr.onload = function() {
-        if (xhr.status === 201) {
-            successregister();
-            changePage('login');
+
+        var response = JSON.parse(xhr.responseText);
+
+        if(xhr.status === 201)
+        {
+             successregister();
+              changePage("login");
         }
-        if (xhr.status === 400) {
+        if(response.error_code === 'passwordlow')
+        {
+            lowpassword();
+             changePage("register");
+        }
+        if(response.error_code === 'user_exists_in_42' || response.error_code === 'username_taken' ||response.error_code === 'email_taken')
+        {
             failregister();
-            changePage('register');
-        }
+            changePage("register");
+        }   
     };
 
     let da = {
@@ -93,10 +103,8 @@ function signup(data) {
         email: data["email"],
         password: data["password1"],
         country: data["country_"],
-        city: data["city_"],
-        profileImage: data["img/icon.png"]
+        city: data["city_"]
     };
-    console.log(da);
     xhr.send(JSON.stringify(da));
 }
 
@@ -115,6 +123,18 @@ function successregister() {
 function failregister() {
     Swal.fire({
         title: 'Kullanıcı Adı Yada Email Kullanılıyor',
+        icon: 'error',
+        confirmButtonText: 'Tamam',
+        confirmButtonColor: '#d33',
+        customClass: {
+            popup: 'popupclass'
+        }
+    });
+}
+
+function lowpassword() {
+    Swal.fire({
+        title: 'Şifre en az 8 karakter uzunluğunda olmalı, en az bir büyük harf ve bir özel karakter içermelidir.',
         icon: 'error',
         confirmButtonText: 'Tamam',
         confirmButtonColor: '#d33',
