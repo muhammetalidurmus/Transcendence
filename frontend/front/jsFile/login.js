@@ -150,6 +150,7 @@ function loginup(data) {
             localStorage.setItem('email', response.user.email);
             localStorage.setItem('country', response.user.country);
             localStorage.setItem('city', response.user.city);
+            localStorage.setItem('profileImage', response.user.profile_image_url);
             loginSuccess();
         } 
         else if (xhr.status === 400) {
