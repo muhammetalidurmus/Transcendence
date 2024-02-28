@@ -10,10 +10,9 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
-backend/app/topla/migrations/*
+backend/app/topla/migrations
 frontend/front/three.js/*
-backend/app/media/profile_images/*
-!backend/app/media/profile_images/default.jpeg
+
 
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
 # in your Git repository. Update and uncomment the following line accordingly.
