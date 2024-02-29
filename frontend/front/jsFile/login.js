@@ -1,30 +1,32 @@
-// Giriş sayfası içeriğini oluşturan fonksiyon
+let isLoggedIn = false;
+
+
 function loginAdd() {
     return `
-    <title> Login </title>
-        <div class="profil-backgraund">
-            <div class="login">
-           
+    <title data-translate="titlelogin"> LOGIN </title>
+    <div class="profil-backgraund">
+        
+        <div class="login">
+        <button class="language-selector" onclick="language('tr')">Turkish</button>
+        <button class="language-selector" onclick="language('en')">English</button>
+        <button class="language-selector" onclick="language('ru')">Russian</button>
+    <hr>
             <form action="" method="get" id="auth-girisyapForm" class="auth-form">
-                <h2>GİRİŞ YAP</h2>
-                <label for="username" class="auth-label">Kullanıcı Adı</label>
+                <h2 data-translate="login">LOGIN</h2>
+                <label for="username" class="auth-label" data-translate="usernick">USERNAME</label>
                 <input type="text" id="username" name="username" class="auth-input" required>
-                <label for="id_password1" class="auth-label">Şifre</label>
+                <label for="id_password1" class="auth-label" data-translate="password">PASSWORD</label>
                 <input type="password" id="id_password1" name="password1" class="auth-input" required>
-                <button type="submit" class="auth-button">Giriş Yap</button>
+                <button type="submit" class="auth-button" data-translate="login2">LOGIN</button>
                 <hr>
-                <button type="submit" class="register-button" onclick="changePage('register')">KAYIT OL</button>
+                <button type="button" class="register-button" onclick="changePage('register')" data-translate="register">REGISTER</button>
             </form>
             <hr>
-            <button onclick="loginWithEcole42()" class="ecole42-login-btn">Ecole 42 ile Giriş Yap</button>
-            </form>
+            <button onclick="loginWithEcole42()" class="ecole42-login-btn" data-translate="ecolelogin">Login with Ecole 42</button>
         </div>
-
-        </div>
+    </div>
     `;
 }
-
-let isLoggedIn = false; // Kullanıcı girişi durumunu takip etmek için global değişken
 
 function loginSuccess() {
     isLoggedIn = true; // Kullanıcı giriş yaptı
@@ -172,10 +174,12 @@ function loginup(data) {
 }
 
 function notuser() {
+    var selectedLanguage = localStorage.getItem('selectedLanguage') || 'tr';
     Swal.fire({
-        title: 'Böyle Bir Kullanıcı Yok!',
+        title: translations[selectedLanguage]['noUser'],
         icon: 'error',
-        confirmButtonText: 'Tamam',
+        confirmButtonText: translations[selectedLanguage]['ok'],
+        confirmButtonColor: '#d33',
         customClass: {
             popup: 'popupclass'
         }
@@ -183,10 +187,11 @@ function notuser() {
 }
 
 function notpassword() {
+    var selectedLanguage = localStorage.getItem('selectedLanguage') || 'tr';
     Swal.fire({
-        title: 'Şifreniz Yanlış!',
+        title: translations[selectedLanguage]['wrongPassword'],
         icon: 'error',
-        confirmButtonText: 'Tamam',
+        confirmButtonText: translations[selectedLanguage]['ok'],
         confirmButtonColor: '#d33',
         customClass: {
             popup: 'popupclass'

@@ -119,7 +119,7 @@ def loginup(request):
             user = ecole.objects.get(username=username)
             if check_password(password, user.password):
                 # Kullanıcının profil resminin tam URL'sini oluştur
-                profile_image_url = str('http://localhost:8000') + settings.MEDIA_URL + str(user.profile_image)
+                profile_image_url = str('http://localhost:8000/') + settings.MEDIA_URL + str(user.profile_image)
                 
                 # Kullanıcının şifresi hariç tüm verilerini al
                 user_datas = {
@@ -140,9 +140,6 @@ def loginup(request):
             return JsonResponse({"error": "Kullanıcı bulunamadı"}, status=404)
     else:
         return JsonResponse({"error": "Invalid request"}, status=400)
-def index(request):
-    return render(request,'index.html')
-
 
 @csrf_exempt
 def gettoken():
@@ -205,3 +202,6 @@ def update_profile_image(request):
     else:
         # Yanlış istek tipi için hata mesajı dön
         return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+    
+def index(request):
+    return render(request,'index.html')

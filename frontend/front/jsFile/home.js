@@ -35,7 +35,7 @@ function homeAdd() {
                                             <span class="icon">
                                                 <i class="fa fa-bullseye"></i>
                                             </span>
-                                            <span class="title">GAME</span>
+                                            <span class="title" data-translate="game" >GAME</span>
                                         </span>
                                         <svg viewBox="0 0 173.20508075688772 200" height="200" width="174" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M86.60254037844386 0L173.20508075688772 50L173.20508075688772 150L86.60254037844386 200L0 150L0 50Z" fill="#1e2530"></path></svg>
                                     </a>
@@ -56,7 +56,7 @@ function homeAdd() {
                                             <span class="icon">
                                                 <i class="fa fa-bullseye"></i>
                                             </span>
-                                            <span class="title">PROFİLE</span>
+                                            <span class="title" data-translate="profilhome">PROFİLE</span>
                                         </span>
                                         <svg viewBox="0 0 173.20508075688772 200" height="200" width="174" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M86.60254037844386 0L173.20508075688772 50L173.20508075688772 150L86.60254037844386 200L0 150L0 50Z" fill="#1e2530"></path></svg>
                                     </a>
@@ -77,7 +77,7 @@ function homeAdd() {
                                             <span class="icon">
                                                 <i class="fa fa-bullseye"></i>
                                             </span>
-                                            <span class="title">EXİT</span>
+                                            <span class="title" data-translate="exit">EXİT</span>
                                         </span>
                                         <svg viewBox="0 0 173.20508075688772 200" height="200" width="174" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M86.60254037844386 0L173.20508075688772 50L173.20508075688772 150L86.60254037844386 200L0 150L0 50Z" fill="#1e2530"></path></svg>
                                     </a>
@@ -103,17 +103,14 @@ function redirectAdd() {
 
     return `
 
-    <title>Yönlendiriliyorsunuz...</title>
+    <title data-translate="redirecting"></title>
  
-        <div class="profil-backgraund">
-        <div class="baslik">GİRİŞ BAŞARILI
-        <br>
-        Yönlendiriliyorsunuz ...
-        </div>
+    <div class="profil-backgraund">
+        <div class="baslik" data-translate="loginSuccess"> </div>
         <br>
         <div class="loader"></div>
          
-        </div>
+    </div>
             
     `;
 

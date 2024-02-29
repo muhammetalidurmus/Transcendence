@@ -12,6 +12,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+var searchlanguages = localStorage.getItem('selectedLanguage');
+if(!searchlanguages)
+localStorage.setItem('selectedLanguage', 'tr');
+
 function changePage(page) {
     let content = '';
     
@@ -33,7 +37,6 @@ function changePage(page) {
         localStorage.setItem('isLoggedIn', 'false'); // Oturum durumunu localStorage'a kaydet
         page = 'login';
     }
-
 
     switch (page) {
         case 'login':
@@ -66,6 +69,9 @@ function changePage(page) {
     document.getElementById('content').innerHTML = content;
     window.location.hash = page;
 
+    var languages = localStorage.getItem('selectedLanguage');
+    changeLanguage(languages);
+    
     // Yalnızca oyun sayfasına geçildiğinde oyunu başlat
     if (page === 'pong-game') {
         game_start();
@@ -80,3 +86,4 @@ window.addEventListener('hashchange', function () {
         changePage(page);
     }
 });
+

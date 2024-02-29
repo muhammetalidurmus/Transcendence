@@ -1,32 +1,30 @@
 function registerAdd() {
     return `
-    <title> Register </title>
+    <title data-translate="register">Register</title>
     <div class="profil-backgraund">
         <div class="login">
-            
-                <form action="" method="get" id="auth-registerForm" class="auth-form">
-                    <h2>KAYIT OL</h2>
-                    <label for="username" class="auth-label">Kullanıcı Adı</label>
-                    <input type="text" id="username" name="username" class="auth-input" required>
-                    <label for="id_password1" class="auth-label">Şifre</label>
-                    <input type="password" id="id_password1" name="password1" class="auth-input" required>
-                    <label for="email" class="auth-label">E-posta Adresi</label>
-                    <input type="email" id="email" name="email" class="auth-input" required>
-                    <label for="first_name" class="auth-label">Ad</label>
-                    <input type="text" id="first_name" name="first_name" class="auth-input" required>
-                    <label for="last_name" class="auth-label">Soyad</label>
-                    <input type="text" id="last_name" name="last_name" class="auth-input" required>
-                    <label for="country_" class="auth-label">Ülke</label>
-                    <input type="country_" id="country_" name="country_" class="auth-input" required>
-                    <label for="city_" class="auth-label">Şehir</label>
-                    <input type="city_" id="city_" name="city_" class="auth-input" required>
-
-                    <button type="submit" class="auth-button">KAYIT OL</button>
-                </form>
-         </div>
-
-            <div id="back-button-container"onclick="changePage('login')">
-            <button id="back-button">Back</button>
+            <form action="" method="get" id="auth-registerForm" class="auth-form">
+                <h2 data-translate="register">REGISTER</h2>
+                <label for="username" class="auth-label" data-translate="usernick">Username</label>
+                <input type="text" id="username" name="username" class="auth-input" required>
+                <label for="id_password1" class="auth-label" data-translate="password">Password</label>
+                <input type="password" id="id_password1" name="password1" class="auth-input" required>
+                <label for="email" class="auth-label" data-translate="email">Email Address</label>
+                <input type="email" id="email" name="email" class="auth-input" required>
+                <label for="first_name" class="auth-label" data-translate="firstname">First Name</label>
+                <input type="text" id="first_name" name="first_name" class="auth-input" required>
+                <label for="last_name" class="auth-label" data-translate="lastname">Last Name</label>
+                <input type="text" id="last_name" name="last_name" class="auth-input" required>
+                <label for="country_" class="auth-label" data-translate="country">Country</label>
+                <input type="text" id="country_" name="country_" class="auth-input" required>
+                <label for="city_" class="auth-label" data-translate="city">City</label>
+                <input type="text" id="city_" name="city_" class="auth-input" required>
+                <button type="submit" class="auth-button" data-translate="register">REGISTER</button>
+            </form>
+        </div>
+        <div id="back-button-container" onclick="changePage('home')">
+        <button id="back-button" data-translate="back">Back</button>
+        </div>
     </div>
     `;
 }
@@ -109,10 +107,11 @@ function signup(data) {
 }
 
 function successregister() {
+    var selectedLanguage = localStorage.getItem('selectedLanguage') || 'tr';
     Swal.fire({
-        title: 'Kayıt Başarılı Giriş Yapabilirsiniz',
+        title: translations[selectedLanguage]['successRegister'],
         icon: 'success',
-        confirmButtonText: 'Tamam',
+        confirmButtonText: translations[selectedLanguage]['ok'],
         confirmButtonColor: '#d33',
         customClass: {
             popup: 'popupclass'
@@ -121,10 +120,11 @@ function successregister() {
 }
 
 function failregister() {
+    var selectedLanguage = localStorage.getItem('selectedLanguage') || 'tr';
     Swal.fire({
-        title: 'Kullanıcı Adı Yada Email Kullanılıyor',
+        title: translations[selectedLanguage]['failRegister'],
         icon: 'error',
-        confirmButtonText: 'Tamam',
+        confirmButtonText: translations[selectedLanguage]['ok'],
         confirmButtonColor: '#d33',
         customClass: {
             popup: 'popupclass'
@@ -133,10 +133,13 @@ function failregister() {
 }
 
 function lowpassword() {
+    var selectedLanguage = localStorage.getItem('selectedLanguage') || 'tr';
+    var message = translations[selectedLanguage]['lowPassword'];
+
     Swal.fire({
-        title: 'Şifre en az 8 karakter uzunluğunda olmalı, en az bir büyük harf ve bir özel karakter içermelidir.',
+        title: message,
         icon: 'error',
-        confirmButtonText: 'Tamam',
+        confirmButtonText: translations[selectedLanguage]['ok'],
         confirmButtonColor: '#d33',
         customClass: {
             popup: 'popupclass'

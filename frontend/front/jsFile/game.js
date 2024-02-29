@@ -5,12 +5,12 @@ function gameAdd() {
     <title> PONG GAME </title>
 
     <div class="profil-backgraund">
-        <button class="start-button" onclick="changePage('pong-game')">
-        <img src="img/basla.png" alt="buttonstart" style="width: 250px; height: 100px;"/>
+
+        <button type="button" class="btn btn-danger" onclick="changePage('pong-game')" data-translate="startgame"></button>
         </button>
 
-        <div id="back-button-container"onclick="changePage('home')">
-        <button id="back-button">Back</button>
+        <div id="back-button-container" onclick="changePage('home')">
+            <button id="back-button" data-translate="back">Back</button>
         </div>
 
         <div class="home-profile">
@@ -38,15 +38,15 @@ function buttonstart() {
     <div class="audio-button" id="audioButton"><i class="fa-solid fa-volume-off fa-2xl" style="color: #c70505;"></i></div>
     <div class="scoreboard-container">
         <div class="score">
-          Sol Oyuncu: <span id="leftPlayerScore">0</span>
+        ${username} <span id="leftPlayerScore">0</span>
         </div>
         <div class="score">
-          Sağ Oyuncu: <span id="rightPlayerScore">0</span>
+        ${username} <span id="rightPlayerScore">0</span>
         </div>
       </div>
       <div id="scene-container"></div>
-       <div id="back-button-container"onclick="changePage('game')">
-        <button id="back-button">Back</button>
+       <div id="back-button-container" onclick="changePage('home')">
+            <button id="back-button" data-translate="back">Back</button>
         </div>
 
         <div class="home-profile">

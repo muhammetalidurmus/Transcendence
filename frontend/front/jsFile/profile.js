@@ -8,22 +8,22 @@ function profilAdd() {
     const city = localStorage.getItem('city');
 
     return `
-    <title> Profile </title>
+    <title data-translate="titleprofile"> Profile </title>
 
     <div class="profil-backgraund">
         <div class="container-profil">
             <img src="${profileImage}" alt="Profil Resmi" class="profile-img" id="profile-img" onclick="changeProfileImage()">
             <div class="profile-info">
-            <p><strong>User Name :</strong> <span>${username}</span></p>
-                <p><strong>Name Surname :</strong> <span>${firsname +' '+ lastname}</span></p>
-                <p><strong>E-Mail :</strong> <span>${email}</span></p>
+            <p><strong data-translate="username">User Name :</strong> <span>${username}</span></p>
+                <p><strong data-translate="namesurname">Name Surname :</strong> <span>${firsname +' '+ lastname}</span></p>
+                <p><strong data-translate="email">E-Mail :</strong> <span>${email}</span></p>
                 <br>
-                <p><strong>Country / City:</strong> <span>${country +' - '+ city}</span></p>
+                <p><strong data-translate="countrycity">Country / City:</strong> <span>${country +' - '+ city}</span></p>
             </div>
         </div>
 
         <div id="back-button-container" onclick="changePage('home')">
-            <button id="back-button">Back</button>
+            <button id="back-button" data-translate="back">Back</button>
         </div>
     </div>
     `;

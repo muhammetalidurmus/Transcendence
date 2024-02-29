@@ -1,3 +1,23 @@
+.language-selector {
+  background-color: #f30000; /* Arka plan rengi */
+  color: #ffffff; /* Metin rengi */
+  padding: 10px; /* İç boşluk */
+  border: 1px solid #ddd; /* Kenarlık */
+  border-radius: 5px; /* Kenarlık yuvarlaklığı */
+  font-size: 16px; /* Metin boyutu */
+  cursor: pointer; /* İmleç tipi */
+  margin: 2px; /* Aralık */
+}
+
+.language-selector:hover {
+  background-color: #000000; /* Fare ile üzerine gelindiğinde arka plan rengi */
+}
+
+.language-selector:focus {
+  outline: none; /* Fokus kenarlığını kaldır */
+  box-shadow: 0 0 5px 2px #c9c9c9; /* Fokus gölgesi */
+}
+
 .popupclass {
   width: 600px; /* Genişlik */
   height: 700px; /* Yükseklik */
