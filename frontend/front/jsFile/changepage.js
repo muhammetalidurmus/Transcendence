@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
     // localStorage'dan oturum durumunu kontrol et
-    isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
     if (window.location.hash) {
         const page = window.location.hash.substring(1);
@@ -8,13 +7,13 @@ document.addEventListener('DOMContentLoaded', function () {
     } 
     else 
     {
-        changePage(isLoggedIn ? 'home' : 'login'); // isLoggedIn true ise home, değilse login sayfasına yönlendir
+        changePage(isLoggedIn ? 'home' : 'login');
     }
 });
 
 var searchlanguages = localStorage.getItem('selectedLanguage');
 if(!searchlanguages)
-localStorage.setItem('selectedLanguage', 'tr');
+localStorage.setItem('selectedLanguage', 'en');
 
 function changePage(page) {
     let content = '';
@@ -34,7 +33,6 @@ function changePage(page) {
 
     if (isLoggedIn && page == 'exit') {
         isLoggedIn = false;
-        localStorage.setItem('isLoggedIn', 'false'); // Oturum durumunu localStorage'a kaydet
         page = 'login';
     }
 

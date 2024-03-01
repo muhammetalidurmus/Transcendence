@@ -115,3 +115,57 @@ function language(language) {
   localStorage.setItem('selectedLanguage', language);
   changeLanguage(language);
 }
+
+
+// Tarayıcının varsayılan dil olarak form required msjlarını seçilen dile göre değiştirme
+function setCustomValidationMessages(language) {
+  const validationMessages = {
+    en: {
+      username: "Username is required.",
+      password1: "Password is required.",
+      email: "Email address is required.",
+      first_name: "First name is required.",
+      last_name: "Last name is required.",
+      country_: "Country is required.",
+      city_: "City is required."
+    },
+    tr: {
+      username: "Kullanıcı adı zorunludur.",
+      password1: "Şifre zorunludur.",
+      email: "E-posta adresi zorunludur.",
+      first_name: "Ad zorunludur.",
+      last_name: "Soyad zorunludur.",
+      country_: "Ülke zorunludur.",
+      city_: "Şehir zorunludur."
+    },
+    ru: {
+      username: "Имя пользователя обязательно.",
+      password1: "Пароль обязателен.",
+      email: "Адрес электронной почты обязателен.",
+      first_name: "Имя обязательно.",
+      last_name: "Фамилия обязательна.",
+      country_: "Страна обязательна.",
+      city_: "Город обязателен."
+    }
+  };
+
+  document.querySelectorAll('.auth-input').forEach(input => {
+    const fieldName = input.name;
+
+    if (validationMessages[language][fieldName]) {
+
+      input.oninvalid = function(event) {
+        event.target.setCustomValidity(validationMessages[language][fieldName]);
+      };
+      input.oninput = function(event) {
+        event.target.setCustomValidity('');
+      };
+    }
+  });
+}
+
+const originalChangeLanguage = changeLanguage;
+changeLanguage = function(language) {
+  originalChangeLanguage(language);
+  setCustomValidationMessages(language);
+};

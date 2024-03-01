@@ -30,7 +30,6 @@ function loginAdd() {
 
 function loginSuccess() {
     isLoggedIn = true; // Kullanıcı giriş yaptı
-    localStorage.setItem('isLoggedIn', 'true'); // Oturum durumunu localStorage'a kaydet
     changePage('redirect'); // Ana sayfaya yönlendir
 }
 
