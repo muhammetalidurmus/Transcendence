@@ -32,7 +32,14 @@ var translations = {
     "wrongPassword": "Şifreniz Yanlış!",
     "ok": "TAMAM",
     "startgame": "OYUNA BAŞLA",
-    
+    "2fa": "İki Adımlı Doğrulama",
+    "2fa2": "E-postanıza gelen doğrulama kodunuz giriniz",
+    "yes": "Onayla",
+    "errorFA": "Girdiğiniz Kod Hatalı Lütfen Tekrar Deneyin",
+    "timeFA": "Doğrulama Kodunun Süresi Bitmiş",
+    "FAtrue": "İki Adımlı Doğrulamayı Aktifleştir",
+    "FAfalse": "İki Adımlı Doğrulamayı Pasifleştir",
+    "FAstatus": "İki Adımlı Doğrulama Seçiminiz Kaydedildi",
   },
   en: {
     'titlelogin': 'LOGIN',
@@ -67,6 +74,14 @@ var translations = {
     "wrongPassword": "Your Password is Incorrect!",
     "ok": "OKEY",
     "startgame": "GAME START",
+    "2fa": "Two-Factor Authentication",
+    "2fa2": "Please enter the verification code sent to your email",
+    "yes": "Confirm",
+    "errorFA": "The code you entered is incorrect. Please try again.",
+    "timeFA": "The verification code has expired",
+    "FAtrue": "Activate Two-Factor Authentication",
+    "FAfalse": "Deactivate Two-Factor Authentication",
+    "FAstatus": "Your Two-Factor Authentication choice has been saved"
   },
   ru: {
     'titlelogin': 'ВХОД',
@@ -101,6 +116,14 @@ var translations = {
     "wrongPassword": "Неверный пароль!",
     "ok": "окей",
     "startgame": "НАЧАТЬ ИГРУ",
+    "2fa": "Двухфакторная аутентификация",
+    "2fa2": "Пожалуйста, введите проверочный код, отправленный на вашу электронную почту",
+    "yes": "Подтвердить",
+    "errorFA": "Введенный вами код неверен. Пожалуйста, попробуйте еще раз.",
+    "timeFA": "Срок действия кода подтверждения истек",
+    "FAtrue": "Активировать двухфакторную аутентификацию",
+    "FAfalse": "Деактивировать двухфакторную аутентификацию",
+    "FAstatus": "Ваш выбор двухфакторной аутентификации сохранен"
   }
 };
   
@@ -127,7 +150,8 @@ function setCustomValidationMessages(language) {
       first_name: "First name is required.",
       last_name: "Last name is required.",
       country_: "Country is required.",
-      city_: "City is required."
+      city_: "City is required.",
+      twofa: "Please Enter the Verification Code",
     },
     tr: {
       username: "Kullanıcı adı zorunludur.",
@@ -136,7 +160,8 @@ function setCustomValidationMessages(language) {
       first_name: "Ad zorunludur.",
       last_name: "Soyad zorunludur.",
       country_: "Ülke zorunludur.",
-      city_: "Şehir zorunludur."
+      city_: "Şehir zorunludur.",
+      twofa: "Lütfen Doğrulama Kodunu Giriniz"
     },
     ru: {
       username: "Имя пользователя обязательно.",
@@ -145,7 +170,8 @@ function setCustomValidationMessages(language) {
       first_name: "Имя обязательно.",
       last_name: "Фамилия обязательна.",
       country_: "Страна обязательна.",
-      city_: "Город обязателен."
+      city_: "Город обязателен.",
+      twofa: "Пожалуйста, введите код подтверждения"
     }
   };
 

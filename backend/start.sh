@@ -10,6 +10,9 @@ done
 echo "Database is ready!"
 
 echo "Applying database migrations..."
+
+
+python /app/manage.py makemigrations
 python /app/manage.py migrate
 
 echo "Starting Django development server..."

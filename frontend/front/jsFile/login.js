@@ -1,4 +1,26 @@
 let isLoggedIn = false;
+let intra = false;
+/* 
+JWT(JSON Web Token) 3 bölümden oluşur; başlık, bilgi ("payload") ve imza.
+Bunlar '.' ile birbirinden ayrıştırılmıştır. İmza ya göre başlık ve bilgi
+şifrelidir (www.jwt.io).
+
+Aşağıdaki fonksiyon şifrelenmiş JWT'yi parametre olarak kabul eder, tokendeki
+şifreli bilgiyi atob() ile ifşa eder. JSON.parse() ile de JSON formatına dönüştürür.
+
+Fonksiyon JWT'deki bilgiyi JSON formatında eder.
+
+FONKSİYON NE ZAMAN İHTİYAÇTIR: 
+*/
+function decodeJWT(token) {
+    // Token'i split ederek ikinci bölümü al
+    const tokenPayload = token.split('.')[1];
+
+    // Base64 ile çöz ve JSON'a çevir
+    const decodedToken = JSON.parse(atob(tokenPayload));
+
+    return decodedToken;
+}
 
 function loginAdd() {
     return `
@@ -28,19 +50,32 @@ function loginAdd() {
 }
 
 function loginSuccess() {
+
     isLoggedIn = true; // Kullanıcı giriş yaptı
-    localStorage.setItem('isLoggedIn', true); // Oturum durumunu localStorage'a kaydet
+    localStorage.setItem('isLoggedIn', true);
     changePage('redirect'); // Ana sayfaya yönlendir
 }
 
+/* 
+Aşağıdaki fonksiyon yalnızca başlangıç yetkilendirme URL'sini ve bir kod talebi oluşturur.
+*/
 function loginWithEcole42() {
-    const client_id = 'u-s4t2ud-c61dbf9496f4cd97c24a0e1df99aa98bd56d9fa972d4ba6f7fce16704a824d0a'; // Ecole 42 uygulamanızın istemci kimliği
-    const redirect_uri = 'http://localhost:443'; // Ecole 42 tarafından yetkilendirme sonrası yönlendirileceğiniz URI
-    const scopes = 'public'; // İzin istediğiniz kapsamlar
+    const client_id = 'u-s4t2ud-c61dbf9496f4cd97c24a0e1df99aa98bd56d9fa972d4ba6f7fce16704a824d0a'; // Ecole 42 uygulamanızın istemci kimliği (Client ID)
+    const redirect_uri = 'http://localhost:443'; // Ecole 42 tarafından yetkilendirme/izinlendirme sonrası yönlendirileceğimiz URI
+    const scopes = 'public'; // İzin istediğiniz kapsam
     const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=${client_id}&redirect_uri=${encodeURIComponent(redirect_uri)}&response_type=code&scope=${encodeURIComponent(scopes)}`;
 
     window.location.href = authUrl;
 }
+
+// URL'de bir kod varsa (OAuth işlemi sonrası), giriş başarılı olarak kabul et
+/* 
+Bu fonksiyon ecole 42'ye başarılı istemde bulunma sonrasını Ecole42'den gelen 
+yanıtı yönetmektedir. Sonuç URL'den yetkilendirme kodunu ayıklar. Sonuç itibariyle
+loginSuccess()'e yönlendirir. Elde edilen kod neticesinde kendi sunucumuzdan sürekli
+izin için token talep eder.
+
+*/
 
 // URL'de bir kod varsa (OAuth işlemi sonrası), giriş başarılı olarak kabul et
 document.addEventListener('DOMContentLoaded', function () 
@@ -56,31 +91,114 @@ document.addEventListener('DOMContentLoaded', function ()
             loginSuccess();
             token(accessToken);
         }
+        if (window.location.search.includes('?username')) {
+            let currentUrl = window.location.href;
+            let formData = getQueryParams(currentUrl);
+        
+            // URL'deki sorgu parametrelerini temizle
+            const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
+            window.history.replaceState(null, null, cleanUrl);
+        
+            if(formData && formData.hasOwnProperty('username') && formData.hasOwnProperty('password1'))
+            {
+                loginup(formData);
+            }
+        
+        }
         
 });
 
-function token(accessToken) { // accessToken parametresini kabul et
+function getMe(jwtToken)
+{
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:8000/api/add/');
+    xhr.open('POST', 'http://localhost:8000/api/me/');
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onreadystatechange = function () {
-        var check = localStorage.getItem('isLoggedIn');
-        if(check)
-        loginstatus();
-
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
                 const data = JSON.parse(xhr.responseText);
                 if (data) 
-                {
-                    localStorage.setItem('username', data.result.login);
-                    localStorage.setItem('profileImage', data.result.image.link);
+                {  
+                    localStorage.setItem('username', data.result.username);
+                    localStorage.setItem('profileImage', data.result.profileImage);
                     localStorage.setItem('firstname', data.result.first_name);
                     localStorage.setItem('lastname', data.result.last_name);
                     localStorage.setItem('email', data.result.email);
-                    localStorage.setItem('country', data.result.campus[0].country);
-                    localStorage.setItem('city', data.result.campus[0].city);
+                    localStorage.setItem('country', data.result.country);
+                    localStorage.setItem('city', data.result.city);
+                    if(intra === true){
+                        let prefixToRemove = 'http://localhost:8000/media/https%3A/';
+                        let httpsPrefix = 'https://';
+                        let cleanedProfileImage = data.result.profileImage.replace(prefixToRemove, httpsPrefix);
+                        localStorage.setItem('profileImage', cleanedProfileImage);
+                        loginSuccess();
+                    }
+                    else{
+                        localStorage.setItem('profileImage', data.result.profileImage);
+                        loginSuccess(); 
+                    }
+                
+                    var check = localStorage.getItem('isLoggedIn');
+                    if(check)
+                    loginstatus();
+                
+                } 
+                else {
+                    alert('Error while processing the request.');
+                }
+
+            } else {
+                alert('Error while processing the request.');
+            }
+        }
+    };
+
+    // accessToken'i doğru şekilde kullan
+    const requestBody = JSON.stringify({ jwt: jwtToken });
+    xhr.send(requestBody);
+}
+
+
+/*
+Bu fonksiyon Ecole 42'den elde edilen yetki kodunu, bizim sunucunun JWT tokeni ile
+takas etmektedir. Elde edilen JWT token bilgileri cache'de - browswer local storage
+de muhafaza edilmektedir.   
+
+*/
+function token(accessToken) { // accessToken (doğru kavram "yetki kodu" olmalı) parametresini kabul eder
+    intra = true;
+    const xhr = new XMLHttpRequest();   // XMLHttpRequest türünde bir nesne tanımlıyoruz. Sunucudan asenkron HTTP istemlerinde kullanılacaktır.
+    xhr.open('POST', 'http://localhost:8000/api/get_access_token/'); // Sunucunun /api/add "endpoint"ine bir POST istemi kurguluyoruz. Bu endpoint yüksek ihtimal yetki kodunu JWT ye takas edilmesi işlemini yönetecektir.
+    xhr.setRequestHeader('Content-Type', 'application/json');   // İstem başlığında istem içeriğinin JSON formatında olacağını bildiriyoruz.
+
+    xhr.onreadystatechange = function () {  //sunucuya iletilen istemler asenkron niteliktedir. UI sunucudan yanıt gelene kadar duraksamak yerine xhr sunucudan bilgi geldiğinde harekete geçmektedir.
+                                            // sunucudan bilgi ulaştığında xhr istemi "açık"tan, "teslim almaktadır"a dönüşmektedir. Bu durumda function() tetiklenmektedir, tanımı parantez içidir. 
+                                            //function() xhr'nin mevcut durumuna readystate metodundan erişmektedir. readystate'in alabileceği değerler; 0-Henüz istem gönderilmedi, 1-İstem açıldı
+                                            //ancak henüz gönderilmedi, 2-sunucu yanıtının başlığı ulaştı ancak bilgi bölümü ulaşmadı, 3-Bil bölümü alınmaktadır ve 4-İstem neticelenmiştir.
+        if (xhr.readyState == 4) {          //böylece istem tamamlandımı diye sorgulamış oluyoruz
+            if (xhr.status == 200) {        //xhr nin status metodundan neticelenen istemin başarılı bir netice olup olmadığını kontrol ediyoruz
+                const data = JSON.parse(xhr.responseText);  //Sunucunun başarılı yanıtına xhr nin responseText metodundan string olarak erişebiliyoruz. JSON.parse bunu JSON formatına dönüştürmekte
+                                                            // ve data değişkenine atanmaktadır.
+                if (data)                   // data nın bir değeri varsa
+                {
+                      // data.result 'un bizim beklediğimişz JSON tokeni olduğu varsayılmaktadır. Bunu cachte - browser'a ait local storage de jwtToken 
+                                                                    // etiketi ile muhafaza ediyoruz.
+                    
+                    let jwtPayload = decodeJWT(data.result);
+                    
+                    if (jwtPayload.type == 1)
+                    {
+                        localStorage.setItem("loginToken", data.result);
+                        loginSuccess();
+                        getMe(data.result);
+                    }
+                    else if (jwtPayload.type == 2)
+                    {
+                        localStorage.setItem("2faToken", data.result);
+                        changePage('2fa');
+                        startCountdown()
+                    }
 
                 } 
                 else {
@@ -115,86 +233,38 @@ window.history.replaceState(null, null, cleanUrl);
     return queryParams;
 }
 
-
-document.addEventListener('DOMContentLoaded', function () 
-{
-    if (window.location.search.includes('?username')) {
-        let currentUrl = window.location.href;
-        let formData = getQueryParams(currentUrl);
-    
-        // URL'deki sorgu parametrelerini temizle
-        const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
-        window.history.replaceState(null, null, cleanUrl);
-    
-        if(formData && formData.hasOwnProperty('username') && formData.hasOwnProperty('password1'))
-        {
-            loginup(formData);
-        }
-    
-    }
-        
-});
-
 function loginup(data) {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://localhost:8000/api/loginup/', true);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
     xhr.onload = function() {
-        if (xhr.status === 201) {
+        if (xhr.status === 200) {
             // Yanıttan elde edilen veriyi ayrıştır
-            var response = JSON.parse(xhr.responseText);
+            response = JSON.parse(xhr.responseText);
+
             // Kullanıcı verilerini localStorage'a ayrı ayrı kaydet
-            localStorage.setItem('username', response.user.username);
-            localStorage.setItem('firstname', response.user.first_name);
-            localStorage.setItem('lastname', response.user.last_name);
-            localStorage.setItem('email', response.user.email);
-            localStorage.setItem('country', response.user.country);
-            localStorage.setItem('city', response.user.city);
-            localStorage.setItem('profileImage', response.user.profile_image_url);
-            loginSuccess();
-        } 
-        else if (xhr.status === 400) {
+            let jwtPayload = decodeJWT(response.result);
+            
+            if (jwtPayload.type == 1) {
+                localStorage.setItem("loginToken", response.result);
+                loginSuccess();
+                getMe(response.result);
+
+            } else if (jwtPayload.type == 2) {
+                localStorage.setItem("2faToken", response.result);
+                changePage('2fa');
+                startCountdown();
+            }
+        } else if (xhr.status === 400) {
             notpassword();
             changePage('login');
-        }
-
-        if (xhr.status === 404) {
+        } else if (xhr.status === 404) {
             notuser();
             changePage('login');
         } 
     };
-
-    let da = {
-        username: data["username"],
-        password: data["password1"]
-    };
-    xhr.send(JSON.stringify(da));
+    xhr.send(JSON.stringify(data));
 }
 
-function notuser() {
-    var selectedLanguage = localStorage.getItem('selectedLanguage') || 'tr';
-    Swal.fire({
-        title: translations[selectedLanguage]['noUser'],
-        icon: 'error',
-        confirmButtonText: translations[selectedLanguage]['ok'],
-        confirmButtonColor: '#d33',
-        customClass: {
-            popup: 'popupclass'
-        }
-    });
-}
-
-function notpassword() {
-    var selectedLanguage = localStorage.getItem('selectedLanguage') || 'tr';
-    Swal.fire({
-        title: translations[selectedLanguage]['wrongPassword'],
-        icon: 'error',
-        confirmButtonText: translations[selectedLanguage]['ok'],
-        confirmButtonColor: '#d33',
-        customClass: {
-            popup: 'popupclass'
-        }
-    });
-}
 

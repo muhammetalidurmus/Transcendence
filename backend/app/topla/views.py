@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.shortcuts import render
-import requests
+import requests  # requests kütüphanesini içe aktarın
 from .models import ecole
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password 
@@ -10,63 +10,19 @@ from django.core.files.base import ContentFile
 from django.conf import settings
 import base64
 import re
+import jwt
+from django.contrib.auth.models import User
+from rest_framework.exceptions import AuthenticationFailed
+from django.shortcuts import render, redirect, HttpResponseRedirect
+import jwt
+from datetime import datetime, timedelta
+import random
+from django.core.mail import send_mail
 
-@csrf_exempt
-def get_access_token(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        authorization_code = data.get('code')  # Frontend'den gelen yetkilendirme kodu
-        if authorization_code:
-            # Yetkilendirme kodunu kullanarak access_token al
-            token_url = 'https://api.intra.42.fr/oauth/token'
-            client_id = 'u-s4t2ud-c61dbf9496f4cd97c24a0e1df99aa98bd56d9fa972d4ba6f7fce16704a824d0a'
-            client_secret = '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'
-            redirect_uri = 'http://localhost:443'
-            grant_type = 'authorization_code'
-            
-            token_data = {
-                'grant_type': grant_type,
-                'client_id': client_id,
-                'client_secret': client_secret,
-                'code': authorization_code,
-                'redirect_uri': redirect_uri
-            }
-            token_response = requests.post(token_url, data=token_data)
-            if token_response.status_code == 200:
-                token_info = token_response.json()
-                access_token = token_info.get('access_token')
 
-                # Access token ile kullanıcı bilgilerini al
-                user_info_url = 'https://api.intra.42.fr/v2/me'
-                headers = {'Authorization': f'Bearer {access_token}'}
-                user_response = requests.get(user_info_url, headers=headers)
-                
-                if user_response.status_code == 200:
-                    user_data = user_response.json()
-                    user_exists = ecole.objects.filter(username=user_data['login']).exists()# Kullanıcı adıyla veritabanını kontrol et eğer bu kullanıcı yoksa veritabanına kaydet.
-                    if user_exists:
-                        logintrue(user_data['login'])
-                    if not user_exists:
-                        ecole.objects.create(
-                        username=user_data['login'],
-                        first_name=user_data['first_name'],
-                        last_name=user_data['last_name'],
-                        email=user_data['email'],
-                        country=user_data['campus'][0]['country'],
-                        city=user_data['campus'][0]['city'],
-                        loginIn=True,
-                    )
-                    return JsonResponse({'result': user_data})
-                else:
-                    return JsonResponse({'error': 'Failed to fetch user data', 'status_code': user_response.status_code})
-            else:
-                return JsonResponse({'error': 'Failed to obtain access token', 'status_code': token_response.status_code})
-        else:
-            return JsonResponse({'error': 'No authorization code provided'})
 
-    else:
-        return JsonResponse({'error': 'Invalid request method'})
-    
+
+
 @csrf_exempt
 def is_password_valid(password):
     if len(password) < 8:
@@ -105,7 +61,7 @@ def register(request):
                 email=data['email'],
                 country=data['country'],
                 city=data['city'],
-                password=make_password(data['password'])
+                password=make_password(data['password']),
             )
             return JsonResponse({"message": "Kullanıcı başarıyla oluşturuldu"}, status=201)
     
@@ -115,28 +71,26 @@ def loginup(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         username = data.get('username')
-        password = data.get('password')  # Frontend'den alınan password alanı
+        password = data.get('password1')
 
         try:
             user = ecole.objects.get(username=username)
-            if check_password(password, user.password):
-                # Kullanıcının profil resminin tam URL'sini oluştur
-                profile_image_url = str('http://localhost:8000/') + settings.MEDIA_URL + str(user.profile_image)
+            
+            if check_password(str(password), str(user.password)):
                 logintrue(username)
                 
-                # Kullanıcının şifresi hariç tüm verilerini al
-                user_datas = {
-                    "id": user.id,
-                    "username": user.username,
-                    "first_name": user.first_name,
-                    "last_name": user.last_name,
-                    "email": user.email,
-                    "country": user.country,
-                    "city": user.city,
-                    "profile_image_url": profile_image_url,
-                }
-                
-                return JsonResponse({"message": "Kullanıcı doğrulandı", "user": user_datas}, status=201)
+                if user.enable2f == True:
+                    randint = random.randint(1000, 9999)
+                    #def send_email(subject, message, recipient_list):
+                    send_email("Transcendence Verification Code", "Ur Code Is " + str(randint), user.email)
+                    print(randint)
+                    user.two_factor_code = randint
+                    user.save()
+                    jwtToken = generate_jwt({"username": username, "type": 2}, "geciciAnahtar_e", 1)
+                    return JsonResponse({"status": "2f", "result": jwtToken})
+                jwtToken = generate_jwt({"username": username, "type": 1}, "geciciAnahtar_e", 60)
+                print("PRINTING: " + jwtToken)
+                return JsonResponse({"status": "jwt", 'result': jwtToken})
             else:
                 return JsonResponse({"error": "Kullanıcı adı veya şifre hatalı"}, status=400)
         except ecole.DoesNotExist:
@@ -206,20 +160,203 @@ def update_profile_image(request):
         # Yanlış istek tipi için hata mesajı dön
         return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
     
-
-def logintrue(username):
-    user = ecole.objects.get(username=username)
-    user.loginIn = 'True'
-    user.save()
-
-def loginfalse(username):
-    user = ecole.objects.get(username=username)
-    user.loginIn = 'False'
-    user.save()
-
-    
 def index(request):
     return render(request,'index.html')
+
+@csrf_exempt
+def get_access_token(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        authorization_code = data.get('code')  # Frontend'den gelen yetkilendirme kodu
+        if authorization_code:
+            # Yetkilendirme kodunu kullanarak access_token al
+            token_url = 'https://api.intra.42.fr/oauth/token'
+            client_id = 'u-s4t2ud-c61dbf9496f4cd97c24a0e1df99aa98bd56d9fa972d4ba6f7fce16704a824d0a'
+            client_secret = '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'
+            redirect_uri = 'http://localhost:443'
+            grant_type = 'authorization_code'
+            
+            token_data = {
+                'grant_type': grant_type,
+                'client_id': client_id,
+                'client_secret': client_secret,
+                'code': authorization_code,
+                'redirect_uri': redirect_uri
+            }
+            token_response = requests.post(token_url, data=token_data)
+            if token_response.status_code == 200:
+                token_info = token_response.json()
+                access_token = token_info.get('access_token')
+
+                # Access token ile kullanıcı bilgilerini al
+                user_info_url = 'https://api.intra.42.fr/v2/me'
+                headers = {'Authorization': f'Bearer {access_token}'}
+                user_response = requests.get(user_info_url, headers=headers)
+                
+                if user_response.status_code == 200:
+                    user_data = user_response.json()
+                    user_exists = ecole.objects.filter(username=user_data['login']).exists()# Kullanıcı adıyla veritabanını kontrol et eğer bu kullanıcı yoksa veritabanına kaydet.
+                    if user_exists:
+                        logintrue(user_data['login'])
+                    if not user_exists:
+                        ecole.objects.create(
+                        username=user_data['login'],
+                        first_name=user_data['first_name'],
+                        last_name=user_data['last_name'],
+                        email=user_data['email'],
+                        country=user_data['campus'][0]['country'],
+                        city=user_data['campus'][0]['city'],
+                        profile_image=user_data['image']['link'],
+                        loginIn=True,
+                    )
+                    else:
+                        user = ecole.objects.get(username=user_data['login'])
+                        if user.enable2f == True:
+                            randint = random.randint(1000, 9999)
+                            #def send_email(subject, message, recipient_list):
+                            send_email("Transcendence Verification Code", "Ur Code Is " + str(randint), user_data['email'])
+                            print(randint)
+                            user.two_factor_code = randint
+                            user.save()
+                            jwtToken = generate_jwt({"username": user_data["login"], "type": 2}, "geciciAnahtar_e", 1)
+                            return JsonResponse({"status": "2f", "result": jwtToken})
+
+                    jwtToken = generate_jwt({"username": user_data["login"], "type": 1}, "geciciAnahtar_e", 60)
+                    print("PRINTING: " + jwtToken)
+                    return JsonResponse({"status": "jwt", 'result': jwtToken})
+                else:
+                    return JsonResponse({'error': 'Failed to fetch user data', 'status_code': user_response.status_code})
+            else:
+                return JsonResponse({'error': 'Failed to obtain access token', 'status_code': token_response.status_code})
+        else:
+            return JsonResponse({'error': 'No authorization code provided'})
+
+    else:
+        return JsonResponse({'error': 'Invalid request method'})
+
+
+##Oymsk
+def generate_jwt(payload, secretKey, expiration_minutes):
+    # Expiration süresi hesaplanıyor
+    expiration_time = datetime.utcnow() + timedelta(minutes=expiration_minutes)
+
+    # Payload'a 'exp' (expiration) alanı ekleniyor
+    payload['exp'] = expiration_time
+
+    # JWT oluşturuluyor
+    return jwt.encode(payload, secretKey, algorithm='HS256')
+
+
+def validate_jwt(token, secretKey):
+    try:
+        payload = jwt.decode(token, secretKey, algorithms=['HS256'])
+        user = ecole.objects.get(username=payload['username'])
+        return payload, user
+    except jwt.ExpiredSignatureError:
+        raise AuthenticationFailed('JWT token süresi doldu.')
+    except jwt.InvalidTokenError:
+        raise AuthenticationFailed('Geçersiz JWT token.')
+    except User.DoesNotExist:
+        raise AuthenticationFailed('Kullanıcı bulunamadı.')
+
+# sunucu tokene bakarak kullanın kimliliğini belirliyor. Bu görevi me fonksiyonu icra ediyor.json dönüyoruz.
+# {
+#   "jwt": "dsadasdasdasd"
+# }
+#
+#
+@csrf_exempt
+def me(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        jwtToken = data.get("jwt")
+        payload, user = validate_jwt(jwtToken, "geciciAnahtar_e")
+        if payload.get("type") != 1: #login token degilse fail dondurur (token 2fa token de olabilir!)
+            return JsonResponse({'result': "fail"})
+        user_json = {
+            'username': user.username,
+            'profileImage': "http://localhost:8000" + user.profile_image.url,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email,
+            'country': user.country,
+            'city': user.city
+        }
+        print("deneme",user_json)
+        return JsonResponse({'result': user_json})
+
+@csrf_exempt
+def setTwoFactor(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        jwtToken = data.get("jwt")
+        state = data.get("state")
+
+        # JWT doğrulama
+        payload, user = validate_jwt(jwtToken, "geciciAnahtar_e")
+        if payload.get("type") != 1: #login token degilse fail dondurur (token 2fa token de olabilir!)
+            return JsonResponse({'result': "fail"})
+        if user:
+            # Kullanıcıyı bul ve enable2f değerini güncelle
+            try:
+                user_instance = ecole.objects.get(username=user.username)
+                user_instance.enable2f = state
+                user_instance.save()
+
+                return JsonResponse({"message": "Enable2f successfully updated."}) 
+            except ecole.DoesNotExist:
+                return JsonResponse({"error": "User not found."}, status=404)
+            except Exception as e:
+                return JsonResponse({"error": str(e)}, status=500)
+        else:
+            return JsonResponse({"error": "JWT validation failed."}, status=401)
+
+    return JsonResponse({"error": "Invalid request method."}, status=405)
+
+@csrf_exempt
+def validateTwoFactor(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        jwtToken = data.get("jwt")
+        code = data.get("code")
+
+        payload, user = validate_jwt(jwtToken, "geciciAnahtar_e")
+        if payload.get("type") != 2: #2fa token degilse fail dondurur (token login token de olabilir!)
+            return JsonResponse({'result': "fail"})
+        
+        if user:
+            try:
+                user_instance = ecole.objects.get(username=payload.get("username"))
+                #if user_instance.two_factor_retry > 2:
+                #    return JsonResponse({"status": "fail", "message": "cok fazla deneme yaptınız hesabınız askida"})
+                if str(code) == str(user_instance.two_factor_code):
+                    logintrue(user_instance.username)
+                    loginToken = generate_jwt({"username": user_instance.username, "type": 1}, "geciciAnahtar_e", 60)
+                    return JsonResponse({"status": "success", "loginToken": loginToken})
+                else:
+                    #user_instance.two_factor_retry = int(user_instance.two_factor_retry) + 1
+                    return JsonResponse({"status": "fail", "message": "non-matching code"}) 
+                
+            except ecole.DoesNotExist:
+                return JsonResponse({"error": "User not found."}, status=404)
+            except Exception as e:
+                return JsonResponse({"error": str(e)}, status=500)
+        else:
+            return JsonResponse({"error": "JWT validation failed."}, status=401)
+    return JsonResponse({"error": "Invalid request method."}, status=405)
+
+def send_email(subject, message, recipient):
+    recipient_list = []
+    recipient_list.append(recipient) 
+    # E-posta gönderme işlemi
+    send_mail(
+        subject,    # E-posta konusu
+        message,    # E-posta içeriği
+        'fedailer.transcendence@gmail.com',  # Gönderen e-posta adresi
+        recipient_list,  # Alıcıların e-posta adresleri
+        fail_silently=False,  # Hata oluştuğunda sessizce başarısız olma (False ile hata gösterilir)
+    )
+
 
 @csrf_exempt
 def exituser(request):
@@ -261,4 +398,13 @@ def loginstatus(request):
             return JsonResponse({"error": str(e)}, status=400)
     else:
         return JsonResponse({"error": "Geçersiz istek"}, status=400)
+    
+def logintrue(username):
+    user = ecole.objects.get(username=username)
+    user.loginIn = 'True'
+    user.save()
 
+def loginfalse(username):
+    user = ecole.objects.get(username=username)
+    user.loginIn = 'False'
+    user.save()

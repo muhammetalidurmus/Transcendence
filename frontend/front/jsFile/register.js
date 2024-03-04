@@ -42,8 +42,7 @@ function getQueryParams(url) {
         });
     }
     const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
-    window.history.replaceState(null, null, cleanUrl);
-
+window.history.replaceState(null, null, cleanUrl);
     return queryParams;
 }
 

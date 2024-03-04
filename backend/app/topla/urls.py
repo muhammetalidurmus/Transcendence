@@ -1,10 +1,13 @@
 from django.urls import path
-from .views import get_access_token, register, loginup, update_profile_image, exituser, loginstatus
+from .views import *
 from .import views
 
 urlpatterns = [
     path('', views.index),
-    path('add/', get_access_token, name='get_access_token'),
+    path('me/', me, name='me'),
+    path('set2fa/', setTwoFactor, name='setTwoFactor'),
+    path('validateTwoFactor/', validateTwoFactor, name='validateTwoFactor'),
+    path('get_access_token/', get_access_token, name='get_access_token'),
     path('register/', register, name='register'),
     path('loginup/', loginup, name='loginup'),
     path('exituser/', exituser, name='exituser'),

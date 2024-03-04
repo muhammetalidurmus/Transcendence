@@ -44,7 +44,6 @@ function game_start()
     l_player_p = create_player(-28.5);
     r_player_p = create_player(28.5);
     create_ball();
-    //console.log("ball_x: " + ball_x + " ball_z: " + ball_z);
 }
 
 function loop()
@@ -313,7 +312,6 @@ function reset_ball()
 
     // Rastgele seçilen açı ve belirlenen hız büyüklüğü kullanılarak, topun X ve Z eksenlerindeki hız bileşenlerini hesaplar.
     // Bu, topun oyun alanında belirli bir yörüngede hareket etmesini sağlar.
-    console.log(angle,'deneme');
     ball_x = Math.cos(angle) * hiz_magnitude;
     ball_z = Math.sin(angle) * hiz_magnitude;
 

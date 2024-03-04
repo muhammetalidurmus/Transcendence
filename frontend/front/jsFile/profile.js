@@ -19,6 +19,8 @@ function profilAdd() {
                 <p><strong data-translate="email">E-Mail :</strong> <span>${email}</span></p>
                 <br>
                 <p><strong data-translate="countrycity">Country / City:</strong> <span>${country +' - '+ city}</span></p>
+                <button type="button" class="btn btn-warning" onclick="set2fa(true)" data-translate="FAtrue"></button>
+                <button type="button" class="btn btn-warning" onclick="set2fa(false)" data-translate="FAfalse"></button>
             </div>
         </div>
 

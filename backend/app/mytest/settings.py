@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-b@5-m3oep$_2^e5f$y&7n%&m^jq*_6-v)o2xet&1jkx8ec!lud
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,7 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'topla',
+
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'fedailer.transcendence@gmail.com'
+EMAIL_HOST_PASSWORD = 'lwcekvajmrtoxgph'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',

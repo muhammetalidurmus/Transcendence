@@ -9,6 +9,8 @@ class ecole(models.Model):
     city = models.CharField(max_length=60, default='none')
     password = models.CharField(max_length=100, default='none')
     profile_image = models.ImageField(upload_to='profile_images/', default='profile_images/default.jpg')
+    two_factor_code = models.PositiveIntegerField(default=0)  # 4 haneli sayı
+    enable2f = models.BooleanField(default=False)  # True ya da False değeri alacak
     loginIn = models.CharField(max_length=8, default='False')
 
     def __str__(self):
