@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.shortcuts import render
-import requests  # requests kütüphanesini içe aktarın
+import requests
 from .models import ecole
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password 
@@ -44,6 +44,8 @@ def get_access_token(request):
                 if user_response.status_code == 200:
                     user_data = user_response.json()
                     user_exists = ecole.objects.filter(username=user_data['login']).exists()# Kullanıcı adıyla veritabanını kontrol et eğer bu kullanıcı yoksa veritabanına kaydet.
+                    if user_exists:
+                        logintrue(user_data['login'])
                     if not user_exists:
                         ecole.objects.create(
                         username=user_data['login'],
@@ -52,6 +54,7 @@ def get_access_token(request):
                         email=user_data['email'],
                         country=user_data['campus'][0]['country'],
                         city=user_data['campus'][0]['city'],
+                        loginIn=True,
                     )
                     return JsonResponse({'result': user_data})
                 else:
@@ -63,8 +66,7 @@ def get_access_token(request):
 
     else:
         return JsonResponse({'error': 'Invalid request method'})
-
-
+    
 @csrf_exempt
 def is_password_valid(password):
     if len(password) < 8:
@@ -120,6 +122,7 @@ def loginup(request):
             if check_password(password, user.password):
                 # Kullanıcının profil resminin tam URL'sini oluştur
                 profile_image_url = str('http://localhost:8000/') + settings.MEDIA_URL + str(user.profile_image)
+                logintrue(username)
                 
                 # Kullanıcının şifresi hariç tüm verilerini al
                 user_datas = {
@@ -203,5 +206,59 @@ def update_profile_image(request):
         # Yanlış istek tipi için hata mesajı dön
         return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
     
+
+def logintrue(username):
+    user = ecole.objects.get(username=username)
+    user.loginIn = 'True'
+    user.save()
+
+def loginfalse(username):
+    user = ecole.objects.get(username=username)
+    user.loginIn = 'False'
+    user.save()
+
+    
 def index(request):
     return render(request,'index.html')
+
+@csrf_exempt
+def exituser(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            username = data.get('username')
+            
+            # Kullanıcıyı bulma işlemi
+            user = ecole.objects.get(username=username)
+            user.loginIn = 'False'
+            user.save()
+
+            return JsonResponse({"message": "ÇIKIŞ YAPILDI"}, status=201)
+        except ecole.DoesNotExist:
+            # Kullanıcı bulunamazsa
+            return JsonResponse({"error": "Kullanıcı bulunamadı"}, status=404)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+    else:
+        return JsonResponse({"error": "Geçersiz istek"}, status=400)
+
+@csrf_exempt
+def loginstatus(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            username = data.get('username')
+            
+            user = ecole.objects.get(username=username)
+            
+            if user.loginIn == 'True':
+                return JsonResponse({}, status=200)
+            else:
+                return JsonResponse({}, status=201)
+        except ecole.DoesNotExist:
+            return JsonResponse({"error": "Kullanıcı bulunamadı"}, status=404)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+    else:
+        return JsonResponse({"error": "Geçersiz istek"}, status=400)
+

@@ -100,7 +100,6 @@ function homeAdd() {
 
 
 function redirectAdd() {
-
     return `
 
     <title data-translate="redirecting"></title>

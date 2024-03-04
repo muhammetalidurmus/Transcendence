@@ -1,6 +1,5 @@
 let isLoggedIn = false;
 
-
 function loginAdd() {
     return `
     <title data-translate="titlelogin"> LOGIN </title>
@@ -30,6 +29,7 @@ function loginAdd() {
 
 function loginSuccess() {
     isLoggedIn = true; // Kullanıcı giriş yaptı
+    localStorage.setItem('isLoggedIn', true); // Oturum durumunu localStorage'a kaydet
     changePage('redirect'); // Ana sayfaya yönlendir
 }
 
@@ -45,7 +45,6 @@ function loginWithEcole42() {
 // URL'de bir kod varsa (OAuth işlemi sonrası), giriş başarılı olarak kabul et
 document.addEventListener('DOMContentLoaded', function () 
 {
-
         if (window.location.search.includes('code=')) 
         {
                 // Yetkilendirme kodunu URL'den çıkar
@@ -66,6 +65,10 @@ function token(accessToken) { // accessToken parametresini kabul et
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onreadystatechange = function () {
+        var check = localStorage.getItem('isLoggedIn');
+        if(check)
+        loginstatus();
+
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
                 const data = JSON.parse(xhr.responseText);
@@ -112,28 +115,25 @@ window.history.replaceState(null, null, cleanUrl);
     return queryParams;
 }
 
-// URL'den sayfanın hash kısmını kontrol eden fonksiyon
-function isLoginPage() {
-    const pageHash = window.location.hash;
-    return pageHash === '#login';
 
-}
-
-// Bu fonksiyonu sayfa yüklendiğinde veya bir sayfa değişikliği olduğunda çağırın
-if (isLoginPage()) {
-    let currentUrl = window.location.href; // Geçerli URL'yi al
-    let formData = getQueryParams(currentUrl);
-
-    // URL'deki sorgu parametrelerini temizle
-    const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
-    window.history.replaceState(null, null, cleanUrl);
-
-    if(formData && formData.hasOwnProperty('username') && formData.hasOwnProperty('password1'))
-    {
-        loginup(formData);
+document.addEventListener('DOMContentLoaded', function () 
+{
+    if (window.location.search.includes('?username')) {
+        let currentUrl = window.location.href;
+        let formData = getQueryParams(currentUrl);
+    
+        // URL'deki sorgu parametrelerini temizle
+        const cleanUrl = window.location.href.split('?')[0] + window.location.hash;
+        window.history.replaceState(null, null, cleanUrl);
+    
+        if(formData && formData.hasOwnProperty('username') && formData.hasOwnProperty('password1'))
+        {
+            loginup(formData);
+        }
+    
     }
-
-}
+        
+});
 
 function loginup(data) {
     var xhr = new XMLHttpRequest();
