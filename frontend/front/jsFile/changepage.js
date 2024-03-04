@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', function () {
         changePage('login');
     }
 });
+var searchlanguages = localStorage.getItem('selectedLanguage');
+if(!searchlanguages)
+localStorage.setItem('selectedLanguage', 'tr');
 
 function changePage(page) {
     let content = '';
