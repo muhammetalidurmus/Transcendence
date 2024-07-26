@@ -1,10 +1,12 @@
+include .env
+
 all:
 	@docker-compose -f docker-compose.yml up --build
 
 down:
 	@docker-compose -f srcs/docker-compose.yml down
 
-re: clean clear all
+re: clean all
 
 clean:
 	@echo "Stopping all running containers..."

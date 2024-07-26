@@ -1,112 +1,81 @@
 function notuser() {
     var selectedLanguage = localStorage.getItem('selectedLanguage') || 'tr';
-    Swal.fire({
-        title: translations[selectedLanguage]['noUser'],
-        icon: 'error',
-        confirmButtonText: translations[selectedLanguage]['ok'],
-        confirmButtonColor: '#d33',
-        customClass: {
-            popup: 'popupclass'
-        }
-    });
+    var errorMessage = translations[selectedLanguage]['noUser'];
+    var errorMessageElement = document.getElementById('errorMessage');
+    errorMessageElement.innerText = errorMessage;
+    var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+    errorModal.show();
 }
 
 function notpassword() {
     var selectedLanguage = localStorage.getItem('selectedLanguage') || 'tr';
-    Swal.fire({
-        title: translations[selectedLanguage]['wrongPassword'],
-        icon: 'error',
-        confirmButtonText: translations[selectedLanguage]['ok'],
-        confirmButtonColor: '#d33',
-        customClass: {
-            popup: 'popupclass'
-        }
-    });
+    var errorMessage = translations[selectedLanguage]['wrongPassword'];
+    var errorMessageElement = document.getElementById('errorMessage');
+    errorMessageElement.innerText = errorMessage;
+    var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+    errorModal.show();
 }
 
 function successregister() {
     var selectedLanguage = localStorage.getItem('selectedLanguage') || 'tr';
-    Swal.fire({
-        title: translations[selectedLanguage]['successRegister'],
-        icon: 'success',
-        confirmButtonText: translations[selectedLanguage]['ok'],
-        confirmButtonColor: '#d33',
-        customClass: {
-            popup: 'popupclass'
-        }
-    });
+    var successMessage = translations[selectedLanguage]['successRegister'];
+    var successMessageElement = document.getElementById('successMessage');
+    successMessageElement.innerText = successMessage;
+    var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+    successModal.show();
 }
 
 function failregister() {
     var selectedLanguage = localStorage.getItem('selectedLanguage') || 'tr';
-    Swal.fire({
-        title: translations[selectedLanguage]['failRegister'],
-        icon: 'error',
-        confirmButtonText: translations[selectedLanguage]['ok'],
-        confirmButtonColor: '#d33',
-        customClass: {
-            popup: 'popupclass'
-        }
-    });
+    var errorMessage = translations[selectedLanguage]['failRegister'];
+    var errorMessageElement = document.getElementById('errorMessage');
+    errorMessageElement.innerText = errorMessage;
+    var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+    errorModal.show();
 }
 
 function lowpassword() {
     var selectedLanguage = localStorage.getItem('selectedLanguage') || 'tr';
-    var message = translations[selectedLanguage]['lowPassword'];
-
-    Swal.fire({
-        title: message,
-        icon: 'error',
-        confirmButtonText: translations[selectedLanguage]['ok'],
-        confirmButtonColor: '#d33',
-        customClass: {
-            popup: 'popupclass'
-        }
-    });
+    var errorMessage = translations[selectedLanguage]['lowPassword'];
+    var errorMessageElement = document.getElementById('errorMessage');
+    errorMessageElement.innerText = errorMessage;
+    var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+    errorModal.show();
 }
 
 function badcodeFA() {
     var selectedLanguage = localStorage.getItem('selectedLanguage') || 'tr';
-    var message = translations[selectedLanguage]['errorFA'];
-
-    Swal.fire({
-        title: message,
-        icon: 'error',
-        confirmButtonText: translations[selectedLanguage]['ok'],
-        confirmButtonColor: '#d33',
-        customClass: {
-            popup: 'popupclass'
-        }
-    });
+    var errorMessage = translations[selectedLanguage]['errorFA'];
+    var errorMessageElement = document.getElementById('errorMessage');
+    errorMessageElement.innerText = errorMessage;
+    var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+    errorModal.show();
 }
 
 function timeFA() {
     var selectedLanguage = localStorage.getItem('selectedLanguage') || 'tr';
-    var message = translations[selectedLanguage]['timeFA'];
-
-    Swal.fire({
-        title: message,
-        icon: 'error',
-        confirmButtonText: translations[selectedLanguage]['ok'],
-        confirmButtonColor: '#d33',
-        customClass: {
-            popup: 'popupclass'
-        }
-    });
+    var errorMessage = translations[selectedLanguage]['timeFA'];
+    var errorMessageElement = document.getElementById('errorMessage');
+    errorMessageElement.innerText = errorMessage;
+    var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+    errorModal.show();
 }
 
 function FAstatus() {
     var selectedLanguage = localStorage.getItem('selectedLanguage') || 'tr';
-    var message = translations[selectedLanguage]['FAstatus'];
+    var successMessage = translations[selectedLanguage]['FAstatus'];
+    var successMessageElement = document.getElementById('successMessage');
+    successMessageElement.innerText = successMessage;
+    var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+    successModal.show();
+}
 
-    Swal.fire({
-        title: message,
-        icon: 'error',
-        confirmButtonText: translations[selectedLanguage]['ok'],
-        confirmButtonColor: '#d33',
-        customClass: {
-            popup: 'popupclass'
-        }
-    });
+function winnerplayer(player) {
+    var selectedLanguage = localStorage.getItem('selectedLanguage') || 'tr';
+    var successMessage = translations[selectedLanguage]['winnerplayer'] + " " + player;
+    var successMessageElement = document.getElementById('successMessage');
+    successMessageElement.innerText = successMessage;
+    var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+    successModal.show();
 }
 

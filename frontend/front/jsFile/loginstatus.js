@@ -1,7 +1,7 @@
 
 function loginstatus(callback) {
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:8000/api/loginstatus/', true);
+    xhr.open('POST', 'https://10.12.4.4/api/loginstatus/', true);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
     const username = localStorage.getItem('username');
@@ -16,13 +16,14 @@ function loginstatus(callback) {
             callback(loginStatus); // Callback fonksiyonunu çağır
         }
     };
+    if(username === false)
     xhr.send(JSON.stringify({username: username}));
 }
 
 
 function exituser() {
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:8000/api/exituser/', true);
+    xhr.open('POST', 'https://10.12.4.4/api/exituser/', true);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
     const username = localStorage.getItem('username');

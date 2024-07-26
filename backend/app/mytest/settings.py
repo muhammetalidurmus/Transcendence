@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-b@5-m3oep$_2^e5f$y&7n%&m^jq*_6-v)o2xet&1jkx8ec!lud'
+SECRET_KEY = os.getenv('SECRETKEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -42,11 +45,13 @@ INSTALLED_APPS = [
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'fedailer.transcendence@gmail.com'
-EMAIL_HOST_PASSWORD = 'lwcekvajmrtoxgph'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -61,11 +66,12 @@ MIDDLEWARE = [
 
 # settings.py
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Örnek olarak, frontend uygulamanızın adresi
-    "http://localhost:423",   # Başka bir örnek origin
-    "http://localhost:443",   # Başka bir örnek origin
-]
+CORS_ALLOWED_ORIGINS = True
+# [
+#     "http://localhost:3000",  # Örnek olarak, frontend uygulamanızın adresi
+#     "http://localhost:423",   # Başka bir örnek origin
+#     "http://localhost:443",   # Başka bir örnek origin
+# ]
 
 # settings.py
 
@@ -118,11 +124,11 @@ WSGI_APPLICATION = 'mytest.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mdurmus',  # PostgreSQL DB adı
-        'USER': 'postgres',  # PostgreSQL kullanıcı adı
-        'PASSWORD': 'mdurmus',  # PostgreSQL şifresi
-        'HOST': 'postgres',  # Docker Compose dosyasında belirttiğiniz servis adı
-        'PORT': '5432',  # PostgreSQL portu
+        'NAME': os.getenv('PGDATABASE'),  # PostgreSQL DB adı
+        'USER': os.getenv('PGUSER'),  # PostgreSQL kullanıcı adı
+        'PASSWORD': os.getenv('PGPASSWORD'),  # PostgreSQL şifresi
+        'HOST': os.getenv('PGHOST'),  # Docker Compose dosyasında belirttiğiniz servis adı
+        'PORT': os.getenv('PGPORT'),  # PostgreSQL portu
     }
 }
 

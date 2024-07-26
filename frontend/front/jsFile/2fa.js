@@ -1,3 +1,4 @@
+let faTimer = true;
 function twofaAdd() {
     return `
     <title data-translate="titlelogin"> Two Factor Auth </title>
@@ -17,13 +18,15 @@ function twofaAdd() {
 
 
 function startCountdown() {
-    var timeleft = 60; // Geri sayım süresi (saniye cinsinden)
-    var countdownTimer = setInterval(function(){
+
+        var timeleft = 60; // Geri sayım süresi (saniye cinsinden)
+        var countdownTimer = setInterval(function(){
         var seconds = timeleft % 60;
         var minutes = Math.floor(timeleft / 60);
         
+        if(faTimer === true){
         var countdownElement = document.getElementById("countdown");
-        countdownElement.innerHTML = "<h1 style='color:white;'>" + minutes + ":" + seconds + "</h1>";
+        countdownElement.innerHTML = "<h1 style='color:white;'>" + minutes + ":" + seconds + "</h1>"; }
 
         timeleft--;
 
@@ -41,7 +44,7 @@ function validateTwoFactor(event)
     const code = document.getElementById("2facode").value;
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:8000/api/validateTwoFactor/');
+    xhr.open('POST', 'https://10.12.4.4/api/validateTwoFactor/');
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
@@ -53,11 +56,12 @@ function validateTwoFactor(event)
                     {
                         localStorage.setItem("loginToken", data.loginToken);
                         localStorage.removeItem("2faToken");
+                        faTimer = false; 
                         loginSuccess();
                         getMe(data.loginToken);
                     }
                     else{
-                        alert("Kod Hatalı");
+                        badcodeFA();
                     }
                 } 
                 else {
@@ -78,7 +82,7 @@ function validateTwoFactor(event)
 function set2fa(state)
 {
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:8000/api/set2fa/');
+    xhr.open('POST', 'https://10.12.4.4/api/set2fa/');
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {

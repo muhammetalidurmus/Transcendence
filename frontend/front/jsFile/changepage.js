@@ -40,6 +40,8 @@ function changePage(page) {
         localStorage.setItem('isLoggedIn', false);
         page = 'login';
         exituser();
+        clearLocalStorageExit();
+        clearLocalStorageGame();
     }
 
     switch (page) {
@@ -52,8 +54,32 @@ function changePage(page) {
         case 'game':
             content = gameAdd();
             break;
-        case 'pong-game':
-            content = buttonstart();
+        case 'pong-game1':
+            content = gamestartup();
+            break;
+        case 'pong-game2':
+            content = gamestartup();
+            break;
+        case 'gameRaund1':
+            content = gameRaund1();
+            break;
+        case 'gameRaund2':
+            content = gameRaund2();
+            break;
+        case 'gameRaund3':
+            content = gameRaund3();
+            break;
+        case 'turnuva_lobi':
+            content = gameTurnuva();
+            break;
+        case 'TurnuvaStart1':
+            content = TurnuvaStart1();
+            break;
+        case 'TurnuvaStart2':
+            content = TurnuvaStart2();
+            break;
+        case 'TurnuvaStart3':
+            content = TurnuvaStart3();
             break;
         case 'profile':
             content = profilAdd();
@@ -80,12 +106,54 @@ function changePage(page) {
     changeLanguage(languages);
     
     // Yalnızca oyun sayfasına geçildiğinde oyunu başlat
-    if (page === 'pong-game') {
+    if (page === 'pong-game1') {
+        raundStatus = 0;
+        gameselect = 1;
+        game_start();
+        loop();
+        make_sound();
+    }
+    if (page === 'pong-game2') {
+        raundStatus = 0;
+        gameselect = 2;
+        game_start();
+        loop();
+        make_sound();
+    }
+    if (page === 'gameRaund1') {
+        gameselect = 1;
+        raundStatus = 1;
+        game_start();
+        loop();
+        make_sound();
+    }
+    if (page === 'gameRaund2') {
+        gameselect = 1;
+        raundStatus = 2;
+        game_start();
+        loop();
+        make_sound();
+    }
+    if (page === 'gameRaund3') {
+        gameselect = 1;
+        raundStatus = 3;
         game_start();
         loop();
         make_sound();
     }
 }
+
+function clearLocalStorageExit() {
+    localStorage.removeItem('firstname');
+    localStorage.removeItem('loginToken');
+    localStorage.removeItem('profileImage');
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('username');
+    localStorage.removeItem('email');
+    localStorage.removeItem('city');
+    localStorage.removeItem('lastname');
+    localStorage.removeItem('country');
+  }
 
 window.addEventListener('hashchange', function () {
     var check = localStorage.getItem('isLoggedIn');

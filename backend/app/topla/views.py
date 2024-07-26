@@ -18,10 +18,11 @@ import jwt
 from datetime import datetime, timedelta
 import random
 from django.core.mail import send_mail
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-
-
-
+tempkey = os.getenv('JWTKEY')
 
 @csrf_exempt
 def is_password_valid(password):
@@ -86,9 +87,9 @@ def loginup(request):
                     print(randint)
                     user.two_factor_code = randint
                     user.save()
-                    jwtToken = generate_jwt({"username": username, "type": 2}, "geciciAnahtar_e", 1)
+                    jwtToken = generate_jwt({"username": username, "type": 2}, tempkey, 1)
                     return JsonResponse({"status": "2f", "result": jwtToken})
-                jwtToken = generate_jwt({"username": username, "type": 1}, "geciciAnahtar_e", 60)
+                jwtToken = generate_jwt({"username": username, "type": 1}, tempkey, 60)
                 print("PRINTING: " + jwtToken)
                 return JsonResponse({"status": "jwt", 'result': jwtToken})
             else:
@@ -101,8 +102,8 @@ def loginup(request):
 @csrf_exempt
 def gettoken():
     token_url = 'https://api.intra.42.fr/oauth/token'
-    client_id = 'u-s4t2ud-c61dbf9496f4cd97c24a0e1df99aa98bd56d9fa972d4ba6f7fce16704a824d0a'
-    client_secret = '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'
+    client_id = os.getenv('Eclient_id')
+    client_secret = os.getenv('Eclient_secret')
     data = {
         'grant_type': 'client_credentials',
         'client_id': client_id,
@@ -132,33 +133,33 @@ def check_user_in_42_api(username):
     else:
         raise Exception("Failed to get access token")
    
-@csrf_exempt
-def update_profile_image(request):
-    if request.method == 'POST':
-        # request'ten gelen JSON verisini yükle
-        data = json.loads(request.body)
-        username = data.get('username')
-        image_data = data.get('image')
+# @csrf_exempt
+# def update_profile_image(request):
+#     if request.method == 'POST':
+#         # request'ten gelen JSON verisini yükle
+#         data = json.loads(request.body)
+#         username = data.get('username')
+#         image_data = data.get('image')
 
-        # Base64 kodlanmış resim verisini Django ImageField ile uyumlu hale getir
-        format, imgstr = image_data.split(';base64,')
-        ext = format.split('/')[-1]
+#         # Base64 kodlanmış resim verisini Django ImageField ile uyumlu hale getir
+#         format, imgstr = image_data.split(';base64,')
+#         ext = format.split('/')[-1]
 
-        # Kullanıcıyı bul
-        user = ecole.objects.get(username=username)
+#         # Kullanıcıyı bul
+#         user = ecole.objects.get(username=username)
 
-        # Resim dosyasını ve dosya adını oluştur
-        image_file = ContentFile(base64.b64decode(imgstr), name=f'{user.username}.{ext}')
+#         # Resim dosyasını ve dosya adını oluştur
+#         image_file = ContentFile(base64.b64decode(imgstr), name=f'{user.username}.{ext}')
 
-        # Kullanıcının profil resmini güncelle
-        user.profile_image = image_file
-        user.save()
+#         # Kullanıcının profil resmini güncelle
+#         user.profile_image = image_file
+#         user.save()
 
-        # Başarılı bir yanıt dön
-        return JsonResponse({'status': 'success', 'message': 'Profile image updated successfully.'})
-    else:
-        # Yanlış istek tipi için hata mesajı dön
-        return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+#         # Başarılı bir yanıt dön
+#         return JsonResponse({'status': 'success', 'message': 'Profile image updated successfully.'})
+#     else:
+#         # Yanlış istek tipi için hata mesajı dön
+#         return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
     
 def index(request):
     return render(request,'index.html')
@@ -171,9 +172,9 @@ def get_access_token(request):
         if authorization_code:
             # Yetkilendirme kodunu kullanarak access_token al
             token_url = 'https://api.intra.42.fr/oauth/token'
-            client_id = 'u-s4t2ud-c61dbf9496f4cd97c24a0e1df99aa98bd56d9fa972d4ba6f7fce16704a824d0a'
-            client_secret = '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'
-            redirect_uri = 'http://localhost:443'
+            client_id = os.getenv('Eclient_id')
+            client_secret = os.getenv('Eclient_secret')
+            redirect_uri = 'https://10.12.4.4/'
             grant_type = 'authorization_code'
             
             token_data = {
@@ -218,10 +219,10 @@ def get_access_token(request):
                             print(randint)
                             user.two_factor_code = randint
                             user.save()
-                            jwtToken = generate_jwt({"username": user_data["login"], "type": 2}, "geciciAnahtar_e", 1)
+                            jwtToken = generate_jwt({"username": user_data["login"], "type": 2}, tempkey, 1)
                             return JsonResponse({"status": "2f", "result": jwtToken})
 
-                    jwtToken = generate_jwt({"username": user_data["login"], "type": 1}, "geciciAnahtar_e", 60)
+                    jwtToken = generate_jwt({"username": user_data["login"], "type": 1}, tempkey, 60)
                     print("PRINTING: " + jwtToken)
                     return JsonResponse({"status": "jwt", 'result': jwtToken})
                 else:
@@ -265,17 +266,18 @@ def validate_jwt(token, secretKey):
 # }
 #
 #
+    
 @csrf_exempt
 def me(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         jwtToken = data.get("jwt")
-        payload, user = validate_jwt(jwtToken, "geciciAnahtar_e")
+        payload, user = validate_jwt(jwtToken, tempkey)
         if payload.get("type") != 1: #login token degilse fail dondurur (token 2fa token de olabilir!)
             return JsonResponse({'result': "fail"})
         user_json = {
             'username': user.username,
-            'profileImage': "http://localhost:8000" + user.profile_image.url,
+            'profileImage': "https://10.12.4.4" + user.profile_image.url,
             'first_name': user.first_name,
             'last_name': user.last_name,
             'email': user.email,
@@ -293,7 +295,7 @@ def setTwoFactor(request):
         state = data.get("state")
 
         # JWT doğrulama
-        payload, user = validate_jwt(jwtToken, "geciciAnahtar_e")
+        payload, user = validate_jwt(jwtToken, tempkey)
         if payload.get("type") != 1: #login token degilse fail dondurur (token 2fa token de olabilir!)
             return JsonResponse({'result': "fail"})
         if user:
@@ -320,7 +322,7 @@ def validateTwoFactor(request):
         jwtToken = data.get("jwt")
         code = data.get("code")
 
-        payload, user = validate_jwt(jwtToken, "geciciAnahtar_e")
+        payload, user = validate_jwt(jwtToken, tempkey)
         if payload.get("type") != 2: #2fa token degilse fail dondurur (token login token de olabilir!)
             return JsonResponse({'result': "fail"})
         
@@ -331,7 +333,7 @@ def validateTwoFactor(request):
                 #    return JsonResponse({"status": "fail", "message": "cok fazla deneme yaptınız hesabınız askida"})
                 if str(code) == str(user_instance.two_factor_code):
                     logintrue(user_instance.username)
-                    loginToken = generate_jwt({"username": user_instance.username, "type": 1}, "geciciAnahtar_e", 60)
+                    loginToken = generate_jwt({"username": user_instance.username, "type": 1}, tempkey, 60)
                     return JsonResponse({"status": "success", "loginToken": loginToken})
                 else:
                     #user_instance.two_factor_retry = int(user_instance.two_factor_retry) + 1
@@ -345,6 +347,7 @@ def validateTwoFactor(request):
             return JsonResponse({"error": "JWT validation failed."}, status=401)
     return JsonResponse({"error": "Invalid request method."}, status=405)
 
+
 def send_email(subject, message, recipient):
     recipient_list = []
     recipient_list.append(recipient) 
@@ -356,7 +359,6 @@ def send_email(subject, message, recipient):
         recipient_list,  # Alıcıların e-posta adresleri
         fail_silently=False,  # Hata oluştuğunda sessizce başarısız olma (False ile hata gösterilir)
     )
-
 
 @csrf_exempt
 def exituser(request):
@@ -408,3 +410,7 @@ def loginfalse(username):
     user = ecole.objects.get(username=username)
     user.loginIn = 'False'
     user.save()
+
+def get_client_id(request):
+    client_id = os.getenv('Eclient_id')
+    return JsonResponse({'client_id': client_id})

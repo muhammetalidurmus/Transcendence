@@ -70,7 +70,7 @@ if (isLoginPageOrRegisterPage()) {
 
 function signup(data) {
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:8000/api/register/', true);
+    xhr.open('POST', 'https://10.12.4.4/api/register/', true);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
     xhr.onload = function() {
@@ -106,43 +106,3 @@ function signup(data) {
     xhr.send(JSON.stringify(da));
 }
 
-function successregister() {
-    var selectedLanguage = localStorage.getItem('selectedLanguage') || 'tr';
-    Swal.fire({
-        title: translations[selectedLanguage]['successRegister'],
-        icon: 'success',
-        confirmButtonText: translations[selectedLanguage]['ok'],
-        confirmButtonColor: '#d33',
-        customClass: {
-            popup: 'popupclass'
-        }
-    });
-}
-
-function failregister() {
-    var selectedLanguage = localStorage.getItem('selectedLanguage') || 'tr';
-    Swal.fire({
-        title: translations[selectedLanguage]['failRegister'],
-        icon: 'error',
-        confirmButtonText: translations[selectedLanguage]['ok'],
-        confirmButtonColor: '#d33',
-        customClass: {
-            popup: 'popupclass'
-        }
-    });
-}
-
-function lowpassword() {
-    var selectedLanguage = localStorage.getItem('selectedLanguage') || 'tr';
-    var message = translations[selectedLanguage]['lowPassword'];
-
-    Swal.fire({
-        title: message,
-        icon: 'error',
-        confirmButtonText: translations[selectedLanguage]['ok'],
-        confirmButtonColor: '#d33',
-        customClass: {
-            popup: 'popupclass'
-        }
-    });
-}

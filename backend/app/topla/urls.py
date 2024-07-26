@@ -12,5 +12,6 @@ urlpatterns = [
     path('loginup/', loginup, name='loginup'),
     path('exituser/', exituser, name='exituser'),
     path('loginstatus/', loginstatus, name='loginstatus'),
-    path('update_profile_image/', update_profile_image, name='update_profile_image'),
+    # path('update_profile_image/', update_profile_image, name='update_profile_image'),
+    path('get_client_id/', get_client_id, name='get_client_id'),
 ]

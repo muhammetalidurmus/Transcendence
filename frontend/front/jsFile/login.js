@@ -56,16 +56,35 @@ function loginSuccess() {
     changePage('redirect'); // Ana sayfaya yönlendir
 }
 
-/* 
-Aşağıdaki fonksiyon yalnızca başlangıç yetkilendirme URL'sini ve bir kod talebi oluşturur.
-*/
-function loginWithEcole42() {
-    const client_id = 'u-s4t2ud-c61dbf9496f4cd97c24a0e1df99aa98bd56d9fa972d4ba6f7fce16704a824d0a'; // Ecole 42 uygulamanızın istemci kimliği (Client ID)
-    const redirect_uri = 'http://localhost:443'; // Ecole 42 tarafından yetkilendirme/izinlendirme sonrası yönlendirileceğimiz URI
-    const scopes = 'public'; // İzin istediğiniz kapsam
-    const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=${client_id}&redirect_uri=${encodeURIComponent(redirect_uri)}&response_type=code&scope=${encodeURIComponent(scopes)}`;
 
-    window.location.href = authUrl;
+//Aşağıdaki fonksiyon yalnızca başlangıç yetkilendirme URL'sini ve bir kod talebi oluşturur.
+function loginWithEcole42() {
+
+    // Backend tarafına istek atmamın sebebi 42 tarafından almış olduğum client id .env den alınıyor.
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://10.12.4.4/api/get_client_id/', true);
+    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    
+    xhr.onload = function() {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            const response = JSON.parse(xhr.responseText);
+            const client_id = response.client_id;
+
+            const redirect_uri = 'https://10.12.4.4/'; // Ecole 42 tarafından yetkilendirme/izinlendirme sonrası yönlendirileceğimiz URI
+            const scopes = 'public'; // İzin istediğiniz kapsam
+            const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=${client_id}&redirect_uri=${encodeURIComponent(redirect_uri)}&response_type=code&scope=${encodeURIComponent(scopes)}`;
+
+            window.location.href = authUrl;
+        } else {
+            console.error('İstek başarısız. Durum kodu:', xhr.status);
+        }
+    };
+    
+    xhr.onerror = function() {
+        console.error('İstek başarısız. Bağlantı hatası.');
+    };
+    
+    xhr.send();
 }
 
 // URL'de bir kod varsa (OAuth işlemi sonrası), giriş başarılı olarak kabul et
@@ -88,7 +107,6 @@ document.addEventListener('DOMContentLoaded', function ()
             window.history.replaceState(null, null, cleanUrl);
         
             // `accessToken` değişkenini kullanarak sunucu tarafında erişim token'ı almak için bir istek yapın
-            loginSuccess();
             token(accessToken);
         }
         if (window.location.search.includes('?username')) {
@@ -111,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function ()
 function getMe(jwtToken)
 {
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:8000/api/me/');
+    xhr.open('POST', 'https://10.12.4.4/api/me/');
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onreadystatechange = function () {
@@ -128,15 +146,16 @@ function getMe(jwtToken)
                     localStorage.setItem('country', data.result.country);
                     localStorage.setItem('city', data.result.city);
                     if(intra === true){
-                        let prefixToRemove = 'http://localhost:8000/media/https%3A/';
+                        let prefixToRemove = 'https://10.12.4.4/media/https%3A/';
                         let httpsPrefix = 'https://';
                         let cleanedProfileImage = data.result.profileImage.replace(prefixToRemove, httpsPrefix);
                         localStorage.setItem('profileImage', cleanedProfileImage);
                         loginSuccess();
                     }
-                    else{
-                        localStorage.setItem('profileImage', data.result.profileImage);
-                        loginSuccess(); 
+                    else {
+
+                        localStorage.setItem('profileImage', 'https://i.hizliresim.com/6vuwh1q.jpg');
+                        loginSuccess();
                     }
                 
                     var check = localStorage.getItem('isLoggedIn');
@@ -169,7 +188,7 @@ de muhafaza edilmektedir.
 function token(accessToken) { // accessToken (doğru kavram "yetki kodu" olmalı) parametresini kabul eder
     intra = true;
     const xhr = new XMLHttpRequest();   // XMLHttpRequest türünde bir nesne tanımlıyoruz. Sunucudan asenkron HTTP istemlerinde kullanılacaktır.
-    xhr.open('POST', 'http://localhost:8000/api/get_access_token/'); // Sunucunun /api/add "endpoint"ine bir POST istemi kurguluyoruz. Bu endpoint yüksek ihtimal yetki kodunu JWT ye takas edilmesi işlemini yönetecektir.
+    xhr.open('POST', 'https://10.12.4.4/api/get_access_token/'); // Sunucunun /api/add "endpoint"ine bir POST istemi kurguluyoruz. Bu endpoint yüksek ihtimal yetki kodunu JWT ye takas edilmesi işlemini yönetecektir.
     xhr.setRequestHeader('Content-Type', 'application/json');   // İstem başlığında istem içeriğinin JSON formatında olacağını bildiriyoruz.
 
     xhr.onreadystatechange = function () {  //sunucuya iletilen istemler asenkron niteliktedir. UI sunucudan yanıt gelene kadar duraksamak yerine xhr sunucudan bilgi geldiğinde harekete geçmektedir.
@@ -197,7 +216,7 @@ function token(accessToken) { // accessToken (doğru kavram "yetki kodu" olmalı
                     {
                         localStorage.setItem("2faToken", data.result);
                         changePage('2fa');
-                        startCountdown()
+                        startCountdown();
                     }
 
                 } 
@@ -235,7 +254,7 @@ window.history.replaceState(null, null, cleanUrl);
 
 function loginup(data) {
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:8000/api/loginup/', true);
+    xhr.open('POST', 'https://10.12.4.4/api/loginup/', true);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
     xhr.onload = function() {

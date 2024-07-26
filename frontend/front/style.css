@@ -1,3 +1,101 @@
+/* Oyun ses açma kapama */
+.audio-button {
+  position: fixed;
+  bottom: 3px;
+  right: 20px;
+  cursor: pointer;
+  color: #fa1100;
+}
+
+.audio-button i {
+  font-size: 50px;
+}
+
+
+/* Hata ve Başarı Modallerindeki Görüntü Stili */
+.error-image,.success-image {
+  width: 40px; /* Görüntünün genişliği */
+  height: 40px; /* Görüntünün yüksekliği */
+  margin-right: 10px; /* Başlık ile görüntü arasındaki boşluk */
+
+}
+
+/* Hata Modali */
+#errorModal .modal-content {
+  text-align: center; /* İçeriği ortala */
+}
+#successModal .modal-content {
+  text-align: center; /* İçeriği ortala */
+}
+
+#errorModal,#successModal .modal-header img.error-image {
+  margin: 0 auto; /* Yatay ortala */
+}
+#errorModal, #errorModal .modal-header img.error-image {
+  margin: 0 auto; /* Yatay ortala */
+}
+
+/* ------------------------- TURNUVA MODU -------------------------*/
+.color-button {
+  width: 40px; /* Buton genişliği */
+  height: 40px; /* Buton yüksekliği */
+  border-radius: 50%; /* Yuvarlak buton yapmak için */
+  border: none; /* Buton kenarlığını kaldır */
+  margin: 5px; /* Butonlar arası boşluk */
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.color-button.red {
+  background-color: red; /* Kırmızı buton */
+  margin-top: 15px;
+}
+
+.color-button.blue {
+  background-color: blue; /* Mavi buton */
+}
+
+.color-button.green {
+  background-color: green; /* Yeşil buton */
+}
+
+.color-button.yellow {
+  background-color: yellow; /* Sarı buton */
+}
+.color-button.white {
+  background-color: white; /* Beyaz buton */
+}
+
+.color-button.orange {
+  background-color: orange; /* Turuncu buton */
+}
+
+
+.turnuva {
+  background-color: rgb(46, 46, 46);
+  width: 500px; /* Örnek bir genişlik */
+  height: 650px; /* Örnek bir yükseklik */
+}
+.turnuva2 {
+  background-color: rgb(46, 46, 46);
+  width: 650px; /* Örnek bir genişlik */
+  height: 850px; /* Örnek bir yükseklik */
+  color: rgb(255, 255, 255);
+}
+
+
+.turnuva-label {
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  margin-right: 20px;
+  
+}
+
+.turnuva-label {
+  margin-top:10%
+}
+
+/* ------------------------- Dil Seçim -------------------------*/
 .language-selector {
   background-color: #f30000; /* Arka plan rengi */
   color: #ffffff; /* Metin rengi */
@@ -18,13 +116,6 @@
   box-shadow: 0 0 5px 2px #c9c9c9; /* Fokus gölgesi */
 }
 
-.popupclass {
-  width: 600px; /* Genişlik */
-  height: 700px; /* Yükseklik */
-  background-color: rgba(5, 5, 5, 1); /* Yarı saydam beyaz arka plan */
-  color: #ffffff;
-  box-shadow: 0 0 20px rgb(204, 2, 2); 
-}
 /* ------------------------- LOGİN YÜKLENME EKRANI -------------------------*/
 .baslik {
   color: #fcfcfc;
@@ -114,16 +205,6 @@ home-profile-text {
     font-family: Arial, sans-serif;
     color: #ffffff;
 }
-.audio-button {
-  position: fixed; /* Sayfanın herhangi bir yerine sabitlemek için */
-  bottom: 20px; /* Sayfanın altından 20 piksel yukarıda */
-  right: 20px; /* Sağ tarafa 20 piksel içeride */
-  cursor: pointer;
-  font-family: Arial, sans-serif;
-  color: #ffffff;
-}
-
-
 
 /* -------------------------login-------------------------*/
 .auth-form {
